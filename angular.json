@@ -17,7 +17,8 @@
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
-              "zone.js"
+              "zone.js",
+              "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
@@ -27,6 +28,11 @@
               }
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/assets/css/ng_wizard.min.css",
+              "src/assets/css/ng_wizard_theme_arrows.min.css",
+              "src/assets/css/ng_wizard_theme_circles.min.css",
+              "src/assets/css/ng_wizard_theme_dots.min.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -75,7 +81,8 @@
           "options": {
             "polyfills": [
               "zone.js",
-              "zone.js/testing"
+              "zone.js/testing",
+              "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
