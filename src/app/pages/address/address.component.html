@@ -38,6 +38,26 @@
         </div>
       </div>
 
+      <!-- Address Collection JSON Display -->
+      <div class="card shadow-sm mt-4">
+        <div class="card-header bg-dark text-white">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">
+              <i class="bi bi-code-square"></i> Address Collection (JSON)
+            </h5>
+            <div class="d-flex gap-2">
+              <button class="btn btn-outline-light btn-sm" (click)="refreshAddresses()">
+                <i class="bi bi-arrow-clockwise"></i> Refresh
+              </button>
+              <span class="badge bg-info">{{ addresses.length }} addresses</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <pre class="json-display mb-0"><code>{{ addressesJson }}</code></pre>
+        </div>
+      </div>
+
       <!-- Tutorial Blog Info Section -->
       <div class="alert alert-info mt-4" role="alert">
         <h6 class="alert-heading">
@@ -45,13 +65,15 @@
         </h6>
         <p class="mb-2">
           This Address Management page demonstrates how to integrate reusable components 
-          into Angular applications. The Address Manager component below showcases:
+          into Angular applications. The Address Manager component and JSON display showcase:
         </p>
         <ul class="mb-0">
           <li>Component composition and reusability</li>
           <li>Modern UI design patterns</li>
           <li>Form handling and validation</li>
           <li>Responsive layout implementation</li>
+          <li><strong>Real-time data visualization and JSON formatting</strong></li>
+          <li><strong>Component communication using ViewChild</strong></li>
         </ul>
       </div>
     </div>
