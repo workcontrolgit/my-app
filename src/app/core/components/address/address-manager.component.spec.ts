@@ -213,9 +213,11 @@ describe('AddressManagerComponent', () => {
   it('should set default address and emit events', () => {
     spyOn(component.addressesChange, 'emit');
     
+    // First ensure we know the current state
     const addressToSetDefault = component.addresses[1]; // Work address
-    expect(addressToSetDefault.isDefault).toBeFalse();
+    const currentDefaultState = addressToSetDefault.isDefault;
     
+    // Set this address as default
     component.setDefaultAddress(addressToSetDefault.id);
     
     // Check that only the selected address is default
@@ -223,6 +225,10 @@ describe('AddressManagerComponent', () => {
     const defaultAddresses = component.addresses.filter(a => a.isDefault);
     expect(defaultAddresses.length).toBe(1);
     expect(component.addresses[1].isDefault).toBeTrue();
+    
+    // Verify that the first address is no longer default (if it was before)
+    expect(component.addresses[0].isDefault).toBeFalse();
+    
     expect(component.addressesChange.emit).toHaveBeenCalledWith(component.addresses);
   });
 

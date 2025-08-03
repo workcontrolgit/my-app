@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ApprovalComponent } from './approval.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 describe('ApprovalComponent', () => {
   let component: ApprovalComponent;
@@ -11,9 +13,10 @@ describe('ApprovalComponent', () => {
     const modalSpy = jasmine.createSpyObj('NgbModal', ['open', 'dismissAll']);
 
     await TestBed.configureTestingModule({
-      imports: [ApprovalComponent],
+      imports: [ApprovalComponent, RouterTestingModule],
       providers: [
-        { provide: NgbModal, useValue: modalSpy }
+        { provide: NgbModal, useValue: modalSpy },
+        provideRouter([])
       ]
     })
     .compileComponents();
