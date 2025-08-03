@@ -1,6 +1,6 @@
     <div class="d-flex flex-column min-vh-100">
-      <!-- Enhanced Navigation with Modern Design -->
-      <nav class="navbar navbar-expand-lg navbar-dark bg-primary" role="navigation" aria-label="Main navigation">
+      <!-- Modern Navigation Toolbar -->
+      <nav class="navbar navbar-expand-lg modern-navbar" role="navigation" aria-label="Main navigation">
         <div class="container">
           <a class="navbar-brand" routerLink="/" aria-label="Go to homepage">
             <i class="bi bi-house-door" aria-hidden="true"></i> 
@@ -55,28 +55,6 @@
                   <span>Contact</span>
                 </a>
               </li>
-              <li class="nav-item" role="none">
-                <a class="nav-link" 
-                   routerLink="/address" 
-                   routerLinkActive="active"
-                   (click)="closeMenuOnMobile()"
-                   role="menuitem"
-                   tabindex="0">
-                  <i class="bi bi-geo-alt" aria-hidden="true"></i> 
-                  <span>Address</span>
-                </a>
-              </li>
-              <li class="nav-item" role="none">
-                <a class="nav-link" 
-                   routerLink="/approval" 
-                   routerLinkActive="active"
-                   (click)="closeMenuOnMobile()"
-                   role="menuitem"
-                   tabindex="0">
-                  <i class="bi bi-check-circle" aria-hidden="true"></i> 
-                  <span>Approval</span>
-                </a>
-              </li>
               <li class="nav-item" ngbDropdown role="none">
                 <a class="nav-link dropdown-toggle" 
                    ngbDropdownToggle
@@ -125,23 +103,52 @@
       </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-light py-4 mt-auto">
+    <!-- Modern Footer -->
+    <footer class="text-light py-5 mt-auto">
       <div class="container">
-        <div class="row">
+        <div class="row align-items-center">
           <div class="col-md-6">
-            <p class="mb-0">&copy; 2025 Your App Name. All rights reserved.</p>
+            <div class="footer-brand mb-3 mb-md-0">
+              <h5 class="mb-2 fw-bold">
+                <i class="bi bi-code-slash me-2"></i>
+                Angular Tutorial
+              </h5>
+              <p class="mb-2">&copy; 2025 Angular Component Architecture Tutorial.</p>
+              <p class="small mb-0 opacity-75">
+                Built with Angular 19 & modern web technologies
+              </p>
+            </div>
           </div>
-          <div class="col-md-6 text-end">
-            <a href="#" class="text-light me-3" aria-label="Facebook">
-              <i class="bi bi-facebook"></i>
-            </a>
-            <a href="#" class="text-light me-3" aria-label="Twitter">
-              <i class="bi bi-twitter"></i>
-            </a>
-            <a href="#" class="text-light" aria-label="LinkedIn">
-              <i class="bi bi-linkedin"></i>
-            </a>
+          <div class="col-md-6">
+            <div class="text-md-end">
+              <p class="mb-3 fw-semibold">Connect with us</p>
+              <div class="social-links">
+                <a href="#" aria-label="GitHub Repository">
+                  <i class="bi bi-github"></i>
+                </a>
+                <a href="#" aria-label="Twitter">
+                  <i class="bi bi-twitter"></i>
+                </a>
+                <a href="#" aria-label="LinkedIn">
+                  <i class="bi bi-linkedin"></i>
+                </a>
+                <a href="#" aria-label="Discord Community">
+                  <i class="bi bi-discord"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Additional Footer Content -->
+        <div class="row mt-4 pt-4" style="border-top: 1px solid rgba(255, 255, 255, 0.1);">
+          <div class="col-12 text-center">
+            <div class="footer-tech-stack">
+              <span class="badge bg-gradient me-2 mb-2">Angular 19</span>
+              <span class="badge bg-gradient me-2 mb-2">TypeScript</span>
+              <span class="badge bg-gradient me-2 mb-2">Bootstrap 5</span>
+              <span class="badge bg-gradient me-2 mb-2">ng-bootstrap</span>
+            </div>
           </div>
         </div>
       </div>
