@@ -16,8 +16,9 @@ This tutorial application showcases advanced Angular development concepts throug
 - [Tutorial Highlights](#-tutorial-highlights)
 - [Code Examples](#-code-examples)
 - [Best Practices Demonstrated](#-best-practices-demonstrated)
+- [Learning Objectives](#-learning-objectives)
+- [Quick Start Guide](#-quick-start-guide)
 - [Contributing](#-contributing)
-- [License](#-license)
 
 ## ✨ Features
 
@@ -352,27 +353,6 @@ get approvalSummary() {
 - **Scalable folder structure**
 - **TypeScript strict mode**
 
-## 🎨 Design System
-
-### Color Palette
-- **Primary:** Bootstrap Blue (#0d6efd) - Navigation, primary actions
-- **Success:** Green (#198754) - Approved states, success actions
-- **Warning:** Yellow (#ffc107) - Pending states, warnings
-- **Danger:** Red (#dc3545) - Rejected states, destructive actions
-- **Dark:** (#343a40) - JSON display headers, professional accents
-
-### Typography
-- **Headers:** System fonts with proper hierarchy (h1-h6)
-- **Body:** Bootstrap's native font stack
-- **Code:** Monospace fonts (Courier New, Monaco) for JSON display
-- **Icons:** Bootstrap Icons for consistent iconography
-
-### Spacing & Layout
-- **Container:** Max-width responsive containers
-- **Cards:** 12px border-radius for modern look
-- **Spacing:** Bootstrap's spacing utilities (mt, mb, p, etc.)
-- **Animations:** 0.3s ease transitions for smooth interactions
-
 ## 📖 Learning Objectives
 
 This tutorial teaches developers how to:
@@ -402,7 +382,7 @@ This tutorial teaches developers how to:
    - Custom scrollbars and themes
    - Responsive design patterns
 
-## 🚀 Quick Start Tutorial
+## 🚀 Quick Start Guide
 
 ### Step 1: Explore the Home Page
 - Navigate to `http://localhost:4200`
@@ -410,14 +390,15 @@ This tutorial teaches developers how to:
 - Observe the enhanced navigation
 
 ### Step 2: Address Management
-- Add, edit, and delete addresses
-- Watch the JSON display update in real-time
-- Notice the component communication pattern
+- Add, edit, and delete addresses using the interface
+- Watch the JSON display update in real-time below the grid
+- Notice the component communication pattern with ViewChild
 
 ### Step 3: Approval Workflow
 - Navigate to the Approval page
 - Interact with the workflow interface
 - Observe the complex data structure in JSON display
+- Notice the dynamic status badges
 
 ### Step 4: Code Exploration
 - Examine the ViewChild implementation in page components
@@ -441,6 +422,21 @@ Both Address and Approval pages feature automatic data refresh:
 - Proper indentation and formatting
 - Scrollable content with custom scrollbars
 - Maximum height constraints for usability
+
+## 🎨 Design System
+
+### Color Palette
+- **Primary:** Bootstrap Blue (#0d6efd) - Navigation, primary actions
+- **Success:** Green (#198754) - Approved states, success actions
+- **Warning:** Yellow (#ffc107) - Pending states, warnings
+- **Danger:** Red (#dc3545) - Rejected states, destructive actions
+- **Dark:** (#343a40) - JSON display headers, professional accents
+
+### Typography
+- **Headers:** System fonts with proper hierarchy (h1-h6)
+- **Body:** Bootstrap's native font stack
+- **Code:** Monospace fonts (Courier New, Monaco) for JSON display
+- **Icons:** Bootstrap Icons for consistent iconography
 
 ## 📄 Running the Application
 
