@@ -1,0 +1,126 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <!-- Page Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h1 class="h2 mb-1">{{ title }}</h1>
+          <p class="text-muted mb-0">Streamline your approval processes</p>
+        </div>
+        <div class="d-flex align-items-center">
+          <i class="bi bi-check-circle-fill text-success fs-3"></i>
+        </div>
+      </div>
+
+      <!-- Breadcrumb Navigation -->
+      <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a routerLink="/" class="text-decoration-none">
+              <i class="bi bi-house-door"></i> Home
+            </a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            <i class="bi bi-check-circle"></i> Approval
+          </li>
+        </ol>
+      </nav>
+
+      <!-- Workflow Stats Cards -->
+      <div class="row mb-4">
+        <div class="col-md-3 col-sm-6 mb-3">
+          <div class="card bg-primary text-white h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="card-title">Pending</h6>
+                  <h3 class="mb-0">12</h3>
+                </div>
+                <i class="bi bi-clock-history fs-2 opacity-75"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+          <div class="card bg-success text-white h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="card-title">Approved</h6>
+                  <h3 class="mb-0">45</h3>
+                </div>
+                <i class="bi bi-check-circle fs-2 opacity-75"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+          <div class="card bg-warning text-white h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="card-title">Rejected</h6>
+                  <h3 class="mb-0">3</h3>
+                </div>
+                <i class="bi bi-x-circle fs-2 opacity-75"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+          <div class="card bg-info text-white h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h6 class="card-title">Total</h6>
+                  <h3 class="mb-0">60</h3>
+                </div>
+                <i class="bi bi-bar-chart fs-2 opacity-75"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Approval Workflow Component -->
+      <div class="card shadow-sm">
+        <div class="card-header bg-gradient">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0 text-white">
+              <i class="bi bi-diagram-3"></i> Approval Workflow Manager
+            </h5>
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-outline-light btn-sm">
+                <i class="bi bi-plus-circle"></i> New Request
+              </button>
+              <button type="button" class="btn btn-outline-light btn-sm">
+                <i class="bi bi-funnel"></i> Filter
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <app-approval-workflow></app-approval-workflow>
+        </div>
+      </div>
+
+      <!-- Tutorial Blog Info Section -->
+      <div class="alert alert-info mt-4" role="alert">
+        <h6 class="alert-heading">
+          <i class="bi bi-lightbulb"></i> Workflow Tutorial Content
+        </h6>
+        <p class="mb-2">
+          This Approval Workflow page demonstrates advanced Angular component architecture 
+          and workflow management patterns. Key concepts showcased include:
+        </p>
+        <ul class="mb-0">
+          <li>Workflow state management and visualization</li>
+          <li>Component communication patterns</li>
+          <li>Dashboard design with statistical cards</li>
+          <li>Enterprise-level approval processes</li>
+          <li>Real-time status updates and notifications</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

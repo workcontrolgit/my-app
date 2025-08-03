@@ -24,6 +24,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/address/address.component').then(m => m.AddressComponent)
   },
   {
+    path: 'approval',
+    loadComponent: () => import('./pages/approval/approval.component').then(m => m.ApprovalComponent)
+  },
+  {
     path: 'profile',
     loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent)
   },

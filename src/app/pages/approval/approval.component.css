@@ -1,0 +1,219 @@
+/* Approval Page Styling */
+.container-fluid {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Page Header Styling */
+h1.h2 {
+  color: #2c3e50;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.text-muted {
+  font-size: 1.1rem;
+}
+
+/* Breadcrumb Enhancements */
+.breadcrumb {
+  background-color: rgba(0, 0, 0, 0.03);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+}
+
+.breadcrumb-item a {
+  color: #6c757d;
+  transition: color 0.3s ease;
+}
+
+.breadcrumb-item a:hover {
+  color: #0d6efd;
+}
+
+.breadcrumb-item.active {
+  color: #495057;
+  font-weight: 500;
+}
+
+/* Stats Cards */
+.card {
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-body {
+  position: relative;
+}
+
+.card.bg-primary {
+  background: linear-gradient(135deg, #0d6efd 0%, #0056b3 100%) !important;
+}
+
+.card.bg-success {
+  background: linear-gradient(135deg, #198754 0%, #146c43 100%) !important;
+}
+
+.card.bg-warning {
+  background: linear-gradient(135deg, #ffc107 0%, #d39e00 100%) !important;
+}
+
+.card.bg-info {
+  background: linear-gradient(135deg, #0dcaf0 0%, #0aa2c0 100%) !important;
+}
+
+/* Workflow Card Header */
+.card-header.bg-gradient {
+  background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%) !important;
+  border-bottom: none;
+  padding: 1.25rem 1.5rem;
+}
+
+.card-header .card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.btn-outline-light {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: white;
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* Main Card Body */
+.card-body {
+  padding: 2rem 1.5rem;
+}
+
+/* Alert Styling */
+.alert-info {
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #e3f2fd 0%, #f8f9fa 100%);
+  border-left: 4px solid #6f42c1;
+  padding: 1.5rem;
+}
+
+.alert-heading {
+  color: #6f42c1;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.alert-info ul {
+  padding-left: 1.5rem;
+}
+
+.alert-info li {
+  margin-bottom: 0.5rem;
+  color: #495057;
+}
+
+/* Icon Styling */
+.bi {
+  margin-right: 0.5rem;
+}
+
+.fs-3 {
+  opacity: 0.8;
+}
+
+.fs-2 {
+  font-size: 2rem !important;
+}
+
+/* Stats Card Numbers */
+.card h3 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0;
+}
+
+.card h6 {
+  font-size: 0.9rem;
+  opacity: 0.9;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .d-flex.justify-content-between {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 1rem;
+  }
+  
+  .card-body {
+    padding: 1.5rem 1rem;
+  }
+  
+  .alert-info {
+    padding: 1rem;
+  }
+  
+  .btn-group {
+    width: 100%;
+  }
+  
+  .btn-group .btn {
+    flex: 1;
+  }
+  
+  .card h3 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .card h3 {
+    font-size: 1.75rem;
+  }
+  
+  .fs-2 {
+    font-size: 1.5rem !important;
+  }
+}
+
+/* Animation for page load */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.container-fluid > .row > .col-12 > * {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.container-fluid > .row > .col-12 > *:nth-child(1) { animation-delay: 0.1s; }
+.container-fluid > .row > .col-12 > *:nth-child(2) { animation-delay: 0.2s; }
+.container-fluid > .row > .col-12 > *:nth-child(3) { animation-delay: 0.3s; }
+.container-fluid > .row > .col-12 > *:nth-child(4) { animation-delay: 0.4s; }
+.container-fluid > .row > .col-12 > *:nth-child(5) { animation-delay: 0.5s; }
+
+/* Stats cards staggered animation */
+.row .col-md-3:nth-child(1) .card { animation-delay: 0.3s; }
+.row .col-md-3:nth-child(2) .card { animation-delay: 0.4s; }
+.row .col-md-3:nth-child(3) .card { animation-delay: 0.5s; }
+.row .col-md-3:nth-child(4) .card { animation-delay: 0.6s; }
