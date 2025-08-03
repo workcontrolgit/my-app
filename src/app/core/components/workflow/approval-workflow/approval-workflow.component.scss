@@ -1,0 +1,153 @@
+/* approval-workflow.component.scss */
+
+.badge-success {
+  background-color: #198754;
+  color: white;
+}
+
+.badge-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.badge-warning {
+  background-color: #ffc107;
+  color: #000;
+}
+
+.badge-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.card {
+  transition: box-shadow 0.15s ease-in-out;
+  
+  &:hover {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  }
+  
+  &.border-success {
+    border-color: #198754 !important;
+    border-width: 2px;
+  }
+  
+  &.border-danger {
+    border-color: #dc3545 !important;
+    border-width: 2px;
+  }
+  
+  &.border-warning {
+    border-color: #ffc107 !important;
+    border-width: 2px;
+  }
+  
+  &.border-info {
+    border-color: #0dcaf0 !important;
+    border-width: 1px;
+    border-style: dashed;
+  }
+}
+
+.btn {
+  transition: all 0.15s ease-in-out;
+  
+  &:hover {
+    transform: translateY(-1px);
+  }
+}
+
+.alert-light {
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+  color: #495057;
+}
+
+// Bootstrap Icons (if not already included)
+.bi-check-circle-fill::before { content: "\f26a"; }
+.bi-x-circle-fill::before { content: "\f6b0"; }
+.bi-clock-fill::before { content: "\f28f"; }
+.bi-check-lg::before { content: "\f267"; }
+.bi-x-lg::before { content: "\f6b3"; }
+.bi-clock::before { content: "\f28e"; }
+.bi-exclamation-triangle::before { content: "\f33a"; }
+.bi-info-circle::before { content: "\f30f"; }
+.bi-person-plus::before { content: "\f4c1"; }
+.bi-person-check::before { content: "\f4bb"; }
+
+// Progress bar animation
+ngb-progressbar {
+  .progress-bar {
+    transition: width 0.6s ease;
+  }
+}
+
+// Modal improvements
+.modal-header {
+  border-bottom: 2px solid #dee2e6;
+  
+  .modal-title {
+    font-weight: 600;
+  }
+}
+
+.modal-footer {
+  border-top: 2px solid #dee2e6;
+  padding: 1rem;
+}
+
+// Responsive improvements
+@media (max-width: 768px) {
+  .card-header {
+    .badge {
+      font-size: 0.75rem;
+    }
+  }
+  
+  .btn {
+    font-size: 0.875rem;
+    padding: 0.375rem 0.75rem;
+  }
+  
+  .container-fluid {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+// Status-specific styling
+.status-approved {
+  background-color: rgba(25, 135, 84, 0.1);
+  border-left: 4px solid #198754;
+}
+
+.status-rejected {
+  background-color: rgba(220, 53, 69, 0.1);
+  border-left: 4px solid #dc3545;
+}
+
+.status-pending {
+  background-color: rgba(255, 193, 7, 0.1);
+  border-left: 4px solid #ffc107;
+}
+
+// Loading states
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+// Focus states for accessibility
+.btn:focus,
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+// Card hover effects
+.card-hover {
+  &:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+  }
+}

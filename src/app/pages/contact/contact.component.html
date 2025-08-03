@@ -1,0 +1,27 @@
+<div class="container mt-5">
+  <h1 class="mb-4 text-center display-5">Contact Us</h1>
+
+  <ngb-alert *ngIf="submitted" type="success" [dismissible]="false">
+    <i class="bi bi-check-circle-fill me-2"></i>
+    Thank you, {{ name }}! Your message has been sent.
+  </ngb-alert>
+
+  <form (ngSubmit)="onSubmit()" *ngIf="!submitted">
+    <div class="mb-3">
+      <label for="name" class="form-label">Name</label>
+      <input [(ngModel)]="name" name="name" id="name" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input [(ngModel)]="email" name="email" id="email" type="email" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="message" class="form-label">Message</label>
+      <textarea [(ngModel)]="message" name="message" id="message" rows="5" class="form-control" required></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Send Message</button>
+  </form>
+</div>

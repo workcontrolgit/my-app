@@ -1,0 +1,231 @@
+<!-- address-manager.component.html -->
+<div class="p-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0 fw-semibold">Addresses</h5>
+    <button 
+      type="button" 
+      class="btn btn-primary btn-sm"
+      (click)="openAddressModal()">
+      <i class="bi bi-plus-circle me-1"></i>
+      Add Address
+    </button>
+  </div>
+
+  <!-- Addresses Table -->
+  <div class="table-responsive" *ngIf="addresses.length > 0; else noAddresses">
+    <table class="table table-striped table-hover">
+      <thead class="table-dark">
+        <tr>
+          <th class="fw-semibold fs-6">Type</th>
+          <th class="fw-semibold fs-6">Address</th>
+          <th class="fw-semibold fs-6">City, State</th>
+          <th class="fw-semibold fs-6">Zip Code</th>
+          <th class="fw-semibold fs-6">Default</th>
+          <th class="fw-semibold fs-6">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let address of addresses">
+          <td>
+            <span class="badge fs-6" 
+                  [ngClass]="{
+                    'bg-primary': address.type === 'home',
+                    'bg-success': address.type === 'work',
+                    'bg-secondary': address.type === 'other'
+                  }">
+              {{ address.type | titlecase }}
+            </span>
+          </td>
+          <td class="text-break">{{ address.street }}</td>
+          <td class="text-nowrap">{{ address.city }}, {{ address.state }}</td>
+          <td>{{ address.zipCode }}</td>
+          <td>
+            <span *ngIf="address.isDefault" class="badge bg-warning text-dark fs-6">
+              <i class="bi bi-star-fill"></i> Default
+            </span>
+          </td>
+          <td>
+            <div class="btn-group btn-group-sm d-flex d-md-inline-flex flex-column flex-md-row" role="group">
+              <button 
+                type="button" 
+                class="btn btn-outline-primary mb-1 mb-md-0"
+                (click)="editAddress(address)"
+                title="Edit">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button 
+                type="button" 
+                class="btn btn-outline-success mb-1 mb-md-0"
+                *ngIf="!address.isDefault"
+                (click)="setDefaultAddress(address.id)"
+                title="Set as Default">
+                <i class="bi bi-star"></i>
+              </button>
+              <button 
+                type="button" 
+                class="btn btn-outline-danger"
+                (click)="deleteAddress(address.id)"
+                [disabled]="address.isDefault"
+                title="Delete">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- No Addresses Message -->
+  <ng-template #noAddresses>
+    <div class="text-center py-5">
+      <i class="bi bi-house display-1 text-muted opacity-50"></i>
+      <p class="text-muted mt-3 fs-5">No addresses added yet</p>
+      <button 
+        type="button" 
+        class="btn btn-primary"
+        (click)="openAddressModal()">
+        Add Your First Address
+      </button>
+    </div>
+  </ng-template>
+
+  <!-- Address Modal -->
+  <ng-template #addressModal let-modal>
+    <div class="modal-header bg-light">
+      <h4 class="modal-title fw-semibold">{{ isEditMode ? 'Edit' : 'Add' }} Address</h4>
+      <button 
+        type="button" 
+        class="btn-close" 
+        aria-label="Close"
+        (click)="modal.dismiss()">
+      </button>
+    </div>
+    
+    <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+      <form [formGroup]="addressForm" (ngSubmit)="saveAddress(modal)">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="type" class="form-label fw-medium">Address Type *</label>
+            <select 
+              id="type" 
+              class="form-select"
+              formControlName="type"
+              [class.is-invalid]="addressForm.get('type')?.invalid && addressForm.get('type')?.touched">
+              <option value="">Select type</option>
+              <option value="home">Home</option>
+              <option value="work">Work</option>
+              <option value="other">Other</option>
+            </select>
+            <div class="invalid-feedback d-block" *ngIf="addressForm.get('type')?.invalid && addressForm.get('type')?.touched">
+              Please select an address type
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="country" class="form-label fw-medium">Country *</label>
+            <select 
+              id="country" 
+              class="form-select"
+              formControlName="country"
+              [class.is-invalid]="addressForm.get('country')?.invalid && addressForm.get('country')?.touched">
+              <option value="">Select country</option>
+              <option value="US">United States</option>
+              <option value="CA">Canada</option>
+              <option value="UK">United Kingdom</option>
+              <option value="AU">Australia</option>
+            </select>
+            <div class="invalid-feedback d-block" *ngIf="addressForm.get('country')?.invalid && addressForm.get('country')?.touched">
+              Please select a country
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="street" class="form-label fw-medium">Street Address *</label>
+          <input 
+            type="text" 
+            id="street"
+            class="form-control"
+            formControlName="street"
+            placeholder="Enter street address"
+            [class.is-invalid]="addressForm.get('street')?.invalid && addressForm.get('street')?.touched">
+          <div class="invalid-feedback d-block" *ngIf="addressForm.get('street')?.invalid && addressForm.get('street')?.touched">
+            Street address is required
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="city" class="form-label fw-medium">City *</label>
+            <input 
+              type="text" 
+              id="city"
+              class="form-control"
+              formControlName="city"
+              placeholder="Enter city"
+              [class.is-invalid]="addressForm.get('city')?.invalid && addressForm.get('city')?.touched">
+            <div class="invalid-feedback d-block" *ngIf="addressForm.get('city')?.invalid && addressForm.get('city')?.touched">
+              City is required
+            </div>
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label for="state" class="form-label fw-medium">State *</label>
+            <input 
+              type="text" 
+              id="state"
+              class="form-control"
+              formControlName="state"
+              placeholder="State"
+              [class.is-invalid]="addressForm.get('state')?.invalid && addressForm.get('state')?.touched">
+            <div class="invalid-feedback d-block" *ngIf="addressForm.get('state')?.invalid && addressForm.get('state')?.touched">
+              State is required
+            </div>
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label for="zipCode" class="form-label fw-medium">Zip Code *</label>
+            <input 
+              type="text" 
+              id="zipCode"
+              class="form-control"
+              formControlName="zipCode"
+              placeholder="12345"
+              [class.is-invalid]="addressForm.get('zipCode')?.invalid && addressForm.get('zipCode')?.touched">
+            <div class="invalid-feedback d-block" *ngIf="addressForm.get('zipCode')?.invalid && addressForm.get('zipCode')?.touched">
+              Zip code is required
+            </div>
+          </div>
+        </div>
+
+        <div class="form-check mb-3" *ngIf="!isEditMode || !editingAddress?.isDefault">
+          <input 
+            class="form-check-input" 
+            type="checkbox" 
+            id="isDefault"
+            formControlName="isDefault">
+          <label class="form-check-label fw-medium" for="isDefault">
+            Set as default address
+          </label>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-footer bg-light">
+      <button 
+        type="button" 
+        class="btn btn-secondary"
+        (click)="modal.dismiss()">
+        Cancel
+      </button>
+      <button 
+        type="button" 
+        class="btn btn-primary"
+        [disabled]="addressForm.invalid"
+        (click)="saveAddress(modal)">
+        {{ isEditMode ? 'Update' : 'Save' }} Address
+      </button>
+    </div>
+  </ng-template>
+</div>
