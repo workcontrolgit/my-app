@@ -8,7 +8,7 @@ import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
   standalone: true,
   imports: [CommonModule, FormsModule, NgbAlertModule],
   templateUrl: './contact.component.html',
-  styleUrls: ['./contact.component.css']
+  styleUrl: './contact.component.scss'
 })
 export class ContactComponent {
   name = '';

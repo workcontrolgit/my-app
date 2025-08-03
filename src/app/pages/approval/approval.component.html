@@ -34,7 +34,7 @@
               <div class="d-flex justify-content-between">
                 <div>
                   <h6 class="card-title">Pending</h6>
-                  <h3 class="mb-0">12</h3>
+                  <h3 class="mb-0">{{ dashboardStats.pending }}</h3>
                 </div>
                 <i class="bi bi-clock-history fs-2 opacity-75"></i>
               </div>
@@ -47,7 +47,7 @@
               <div class="d-flex justify-content-between">
                 <div>
                   <h6 class="card-title">Approved</h6>
-                  <h3 class="mb-0">45</h3>
+                  <h3 class="mb-0">{{ dashboardStats.approved }}</h3>
                 </div>
                 <i class="bi bi-check-circle fs-2 opacity-75"></i>
               </div>
@@ -60,7 +60,7 @@
               <div class="d-flex justify-content-between">
                 <div>
                   <h6 class="card-title">Rejected</h6>
-                  <h3 class="mb-0">3</h3>
+                  <h3 class="mb-0">{{ dashboardStats.rejected }}</h3>
                 </div>
                 <i class="bi bi-x-circle fs-2 opacity-75"></i>
               </div>
@@ -73,7 +73,7 @@
               <div class="d-flex justify-content-between">
                 <div>
                   <h6 class="card-title">Total</h6>
-                  <h3 class="mb-0">60</h3>
+                  <h3 class="mb-0">{{ dashboardStats.total }}</h3>
                 </div>
                 <i class="bi bi-bar-chart fs-2 opacity-75"></i>
               </div>
@@ -100,7 +100,17 @@
           </div>
         </div>
         <div class="card-body">
-          <app-approval-workflow></app-approval-workflow>
+          <app-approval-workflow 
+            [workflow]="workflowData"
+            [currentUserRole]="currentUserRole"
+            (approvalSubmitted)="onApprovalSubmitted($event)"
+            (rejectionSubmitted)="onRejectionSubmitted($event)"
+            (supervisorSelected)="onSupervisorSelected($event)"
+            (workflowStatusChanged)="onWorkflowStatusChanged($event)"
+            (workflowUpdated)="onWorkflowUpdated($event)"
+            (approvalAdded)="onApprovalAdded($event)"
+            (approvalUpdated)="onApprovalUpdated($event)">
+          </app-approval-workflow>
         </div>
       </div>
 
@@ -112,11 +122,14 @@
               <i class="bi bi-code-square"></i> Approval Workflow Data (JSON)
             </h5>
             <div class="d-flex gap-2">
-              <button class="btn btn-outline-light btn-sm" (click)="refreshWorkflowData()">
-                <i class="bi bi-arrow-clockwise"></i> Refresh
-              </button>
+              <span class="badge bg-info">{{ workflowTitle }}</span>
+              <span class="badge" [ngClass]="{
+                'bg-warning': workflowStatus === 'pending',
+                'bg-success': workflowStatus === 'approved', 
+                'bg-danger': workflowStatus === 'rejected'
+              }">{{ workflowStatus | titlecase }}</span>
               <ng-container *ngIf="approvalSummary">
-                <span class="badge bg-warning">{{ approvalSummary.pending }} pending</span>
+                <span class="badge bg-secondary">{{ approvalSummary.pending }} pending</span>
                 <span class="badge bg-success">{{ approvalSummary.approved }} approved</span>
                 <span class="badge bg-danger" *ngIf="approvalSummary.rejected > 0">{{ approvalSummary.rejected }} rejected</span>
               </ng-container>
@@ -139,12 +152,13 @@
         </p>
         <ul class="mb-0">
           <li>Workflow state management and visualization</li>
-          <li>Component communication patterns</li>
+          <li>Component communication using &#64;Input/&#64;Output patterns</li>
           <li>Dashboard design with statistical cards</li>
           <li>Enterprise-level approval processes</li>
           <li>Real-time status updates and notifications</li>
           <li><strong>Complex data structure visualization and JSON formatting</strong></li>
           <li><strong>Dynamic badge display based on workflow status</strong></li>
+          <li><strong>Event-driven workflow state management</strong></li>
         </ul>
       </div>
     </div>

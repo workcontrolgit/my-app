@@ -1,31 +1,28 @@
 // address-manager.component.ts
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Address, AddressFormData } from '../../../shared/models';
 
-export interface Address {
-  id: string;
-  type: 'home' | 'work' | 'other';
-  street: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  country: string;
-  isDefault?: boolean;
-}
+// Re-export Address type for external components
+export type { Address };
 
 @Component({
   selector: 'app-address-manager',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './address-manager.component.html',
-  styleUrls: []
+  styleUrls: ['./address-manager.component.scss']
 })
-export class AddressManagerComponent implements OnInit {
+export class AddressManagerComponent implements OnInit, OnChanges {
   @ViewChild('addressModal') addressModal!: TemplateRef<any>;
   
-  addresses: Address[] = [];
+  @Input() addresses: Address[] = [];
+  @Output() addressesChange = new EventEmitter<Address[]>();
+  @Output() addressAdded = new EventEmitter<Address>();
+  @Output() addressUpdated = new EventEmitter<Address>();
+  @Output() addressDeleted = new EventEmitter<string>();
   addressForm!: FormGroup;
   isEditMode = false;
   editingAddress: Address | null = null;
@@ -39,8 +36,14 @@ export class AddressManagerComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Initialize with sample data - replace with actual data loading
-    this.loadAddresses();
+    // Component is now driven by input data
+    this.validateAddresses();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['addresses'] && this.addresses) {
+      this.validateAddresses();
+    }
   }
 
   private initializeForm() {
@@ -55,30 +58,8 @@ export class AddressManagerComponent implements OnInit {
     });
   }
 
-  private loadAddresses() {
-    // Sample data - replace with actual service call
-    this.addresses = [
-      {
-        id: '1',
-        type: 'home',
-        street: '123 Main St',
-        city: 'Anytown',
-        state: 'CA',
-        zipCode: '12345',
-        country: 'US',
-        isDefault: true
-      },
-      {
-        id: '2',
-        type: 'work',
-        street: '456 Business Ave',
-        city: 'Corporate City',
-        state: 'NY',
-        zipCode: '67890',
-        country: 'US',
-        isDefault: false
-      }
-    ];
+  private emitAddressesChange(): void {
+    this.addressesChange.emit([...this.addresses]);
   }
 
   openAddressModal() {
@@ -149,6 +130,7 @@ export class AddressManagerComponent implements OnInit {
           }
           
           this.addresses[index] = updatedAddress;
+          this.addressUpdated.emit(updatedAddress);
         }
       } else {
         // Add new address
@@ -164,13 +146,14 @@ export class AddressManagerComponent implements OnInit {
         }
         
         this.addresses.push(newAddress);
+        this.addressAdded.emit(newAddress);
       }
       
       modal.close();
       this.resetForm();
       
-      // Emit event for parent component if needed
-      this.onAddressesChanged();
+      // Emit changes to parent component
+      this.emitAddressesChange();
     } else {
       // Mark all fields as touched to show validation errors
       this.markFormGroupTouched();
@@ -193,7 +176,8 @@ export class AddressManagerComponent implements OnInit {
         this.addresses[0].isDefault = true;
       }
       
-      this.onAddressesChanged();
+      this.addressDeleted.emit(id);
+      this.emitAddressesChange();
     }
   }
 
@@ -202,7 +186,8 @@ export class AddressManagerComponent implements OnInit {
     const address = this.addresses.find(a => a.id === id);
     if (address) {
       address.isDefault = true;
-      this.onAddressesChanged();
+      this.addressUpdated.emit(address);
+      this.emitAddressesChange();
     }
   }
 
@@ -232,9 +217,9 @@ export class AddressManagerComponent implements OnInit {
   }
 
   private onAddressesChanged() {
-    // This method can be used to emit events or trigger side effects
-    // when addresses are modified
+    // Legacy method - now handled by specific event emitters
     console.log('Addresses updated:', this.addresses);
+    this.emitAddressesChange();
   }
 
   // Public methods for parent component interaction
@@ -245,6 +230,7 @@ export class AddressManagerComponent implements OnInit {
   setAddresses(addresses: Address[]) {
     this.addresses = [...addresses]; // Create a copy
     this.validateAddresses();
+    this.emitAddressesChange();
   }
 
   addAddress(address: Omit<Address, 'id'>): void {
@@ -260,7 +246,8 @@ export class AddressManagerComponent implements OnInit {
     }
 
     this.addresses.push(newAddress);
-    this.onAddressesChanged();
+    this.addressAdded.emit(newAddress);
+    this.emitAddressesChange();
   }
 
   updateAddress(id: string, updates: Partial<Address>): boolean {
@@ -274,8 +261,10 @@ export class AddressManagerComponent implements OnInit {
       this.clearDefaultAddresses();
     }
 
-    this.addresses[index] = { ...this.addresses[index], ...updates };
-    this.onAddressesChanged();
+    const updatedAddress = { ...this.addresses[index], ...updates };
+    this.addresses[index] = updatedAddress;
+    this.addressUpdated.emit(updatedAddress);
+    this.emitAddressesChange();
     return true;
   }
 
@@ -292,7 +281,8 @@ export class AddressManagerComponent implements OnInit {
       this.addresses[0].isDefault = true;
     }
     
-    this.onAddressesChanged();
+    this.addressDeleted.emit(id);
+    this.emitAddressesChange();
     return true;
   }
 

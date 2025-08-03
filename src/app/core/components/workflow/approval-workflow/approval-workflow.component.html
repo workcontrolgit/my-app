@@ -1,5 +1,5 @@
 <!-- approval-workflow.component.html -->
-<div class="container-fluid py-4">
+<div class="container-fluid py-4" *ngIf="workflow; else noWorkflow">
   <!-- Header -->
   <div class="row mb-4">
     <div class="col-12">
@@ -10,20 +10,20 @@
         <div class="card-body">
           <div class="row">
             <div class="col-md-8">
-              <h5>{{ workflow.pdTitle }}</h5>
-              <p class="mb-1"><strong>PD ID:</strong> {{ workflow.pdId }}</p>
-              <p class="mb-1"><strong>Type:</strong> {{ workflow.pdType }}</p>
-              <p class="mb-1"><strong>Submitted by:</strong> {{ workflow.submittedBy }}</p>
-              <p class="mb-1"><strong>Submitted:</strong> {{ formatDate(workflow.submittedDate) }}</p>
+              <h5>{{ workflow?.pdTitle }}</h5>
+              <p class="mb-1"><strong>PD ID:</strong> {{ workflow?.pdId }}</p>
+              <p class="mb-1"><strong>Type:</strong> {{ workflow?.pdType }}</p>
+              <p class="mb-1"><strong>Submitted by:</strong> {{ workflow?.submittedBy }}</p>
+              <p class="mb-1"><strong>Submitted:</strong> {{ workflow?.submittedDate ? formatDate(workflow.submittedDate) : 'N/A' }}</p>
               <div class="alert alert-info p-2 mt-2">
-                <small><i class="bi-info-circle"></i> {{ getPdTypeDescription(workflow.pdType) }}</small>
+                <small><i class="bi-info-circle"></i> {{ workflow?.pdType ? getPdTypeDescription(workflow.pdType) : '' }}</small>
               </div>
             </div>
             <div class="col-md-4 text-md-end">
               <span class="badge fs-6 px-3 py-2" 
-                    [ngClass]="getStatusBadgeClass(workflow.status)">
-                <i [class]="getStatusIcon(workflow.status)"></i>
-                {{ workflow.status | titlecase }}
+                    [ngClass]="workflow?.status ? getStatusBadgeClass(workflow.status) : 'badge-secondary'">
+                <i [class]="workflow?.status ? getStatusIcon(workflow.status) : 'bi-question'"></i>
+                {{ workflow?.status | titlecase }}
               </span>
             </div>
           </div>
@@ -47,7 +47,7 @@
           <ngb-progressbar 
             [value]="progressPercentage" 
             [striped]="true" 
-            [animated]="workflow.status === 'pending'"
+            [animated]="workflow?.status === 'pending'"
             type="success">
           </ngb-progressbar>
         </div>
@@ -234,7 +234,7 @@
                 formControlName="selectedSupervisor"
                 [class.is-invalid]="supervisorSelectionControl?.invalid && supervisorSelectionControl?.touched">
           <option value="">-- Choose Supervisor --</option>
-          <option *ngFor="let supervisor of workflow.availableSupervisors" 
+          <option *ngFor="let supervisor of workflow?.availableSupervisors" 
                   [value]="supervisor">
             {{ supervisor }}
           </option>
@@ -328,4 +328,15 @@
       </button>
     </div>
   </form>
+</ng-template>
+
+<!-- No Workflow Template -->
+<ng-template #noWorkflow>
+  <div class="container-fluid py-4">
+    <div class="text-center py-5">
+      <i class="bi bi-inbox display-1 text-muted"></i>
+      <h3 class="mt-3 text-muted">No Workflow Data</h3>
+      <p class="text-muted">No approval workflow has been loaded yet.</p>
+    </div>
+  </div>
 </ng-template>

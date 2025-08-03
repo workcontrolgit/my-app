@@ -8,6 +8,6 @@ import { NgbAlertModule, NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
   standalone: true,
   imports: [CommonModule, RouterLink, NgbAlertModule, NgbCarouselModule],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrl: './home.component.scss'
 })
 export class HomeComponent {}

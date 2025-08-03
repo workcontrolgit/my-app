@@ -7,6 +7,6 @@ import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
   standalone: true,
   imports: [CommonModule, NgbAlertModule],
   templateUrl: './about.component.html',
-  styleUrls: ['./about.component.css']
+  styleUrl: './about.component.scss'
 })
 export class AboutComponent {}
