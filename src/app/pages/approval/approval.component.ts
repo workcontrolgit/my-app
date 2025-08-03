@@ -11,7 +11,7 @@ import { ApprovalWorkflowComponent, ApprovalWorkflow } from '../../core/componen
     ApprovalWorkflowComponent
   ],
   templateUrl: './approval.component.html',
-  styleUrl: './approval.component.css'
+  styleUrl: './approval.component.scss'
 })
 export class ApprovalComponent implements AfterViewInit {
   @ViewChild(ApprovalWorkflowComponent) approvalWorkflow!: ApprovalWorkflowComponent;
@@ -43,9 +43,9 @@ export class ApprovalComponent implements AfterViewInit {
   get approvalSummary() {
     if (!this.workflowData) return null;
     
-    const pending = this.workflowData.approvals.filter(a => a.status === 'pending').length;
-    const approved = this.workflowData.approvals.filter(a => a.status === 'approved').length;
-    const rejected = this.workflowData.approvals.filter(a => a.status === 'rejected').length;
+    const pending = this.workflowData.approvals.filter((a: any) => a.status === 'pending').length;
+    const approved = this.workflowData.approvals.filter((a: any) => a.status === 'approved').length;
+    const rejected = this.workflowData.approvals.filter((a: any) => a.status === 'rejected').length;
     const total = this.workflowData.approvals.length;
     
     return { pending, approved, rejected, total };

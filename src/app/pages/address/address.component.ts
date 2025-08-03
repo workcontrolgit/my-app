@@ -11,7 +11,7 @@ import { AddressManagerComponent, Address } from '../../core/components/address/
     AddressManagerComponent
   ],
   templateUrl: './address.component.html',
-  styleUrl: './address.component.css'
+  styleUrl: './address.component.scss'
 })
 export class AddressComponent implements AfterViewInit {
   @ViewChild(AddressManagerComponent) addressManager!: AddressManagerComponent;

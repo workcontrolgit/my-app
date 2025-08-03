@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
     NgbCollapseModule
   ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrl: './app.component.scss'
 })
 export class AppComponent {
   // @ViewChild('addressManager') addressManager!: AddressManagerComponent;

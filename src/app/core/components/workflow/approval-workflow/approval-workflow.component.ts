@@ -3,43 +3,18 @@ import { Component, OnInit, Input, Output, EventEmitter, inject, OnChanges, Simp
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { 
+  ApprovalRule, 
+  Approval, 
+  ApprovalWorkflow, 
+  ApprovalEvent, 
+  ApprovalStatus,
+  ApprovalAction,
+  PDType
+} from '../../../../shared/models';
 
-export interface ApprovalRule {
-  requiredApprovers: string[];
-  optionalApprovers: string[];
-  managerSelectsSupervisor?: boolean;
-}
-
-export interface Approval {
-  approverRole: string;
-  approverName: string;
-  status: 'pending' | 'approved' | 'rejected';
-  timestamp: string | null;
-  comments: string | null;
-  isRequired: boolean;
-  needsSupervisorSelection?: boolean;
-  selectedSupervisor?: string;
-}
-
-export interface ApprovalWorkflow {
-  pdId: string;
-  pdTitle: string;
-  pdType: 'Custom PD' | 'Standard PD' | 'Expert and Consultant';
-  status: 'pending' | 'approved' | 'rejected';
-  approvals: Approval[];
-  submittedBy: string;
-  submittedDate: string;
-  availableSupervisors?: string[];
-}
-
-export interface ApprovalEvent {
-  pdId: string;
-  approverRole: string;
-  action: 'approve' | 'reject' | 'select-supervisor';
-  comments?: string;
-  selectedSupervisor?: string;
-  timestamp: string;
-}
+// Re-export ApprovalWorkflow type for external components
+export type { ApprovalWorkflow };
 
 @Component({
   selector: 'app-approval-workflow',

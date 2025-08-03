@@ -3,24 +3,17 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Address, AddressFormData } from '../../../shared/models';
 
-export interface Address {
-  id: string;
-  type: 'home' | 'work' | 'other';
-  street: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  country: string;
-  isDefault?: boolean;
-}
+// Re-export Address type for external components
+export type { Address };
 
 @Component({
   selector: 'app-address-manager',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './address-manager.component.html',
-  styleUrls: []
+  styleUrls: ['./address-manager.component.scss']
 })
 export class AddressManagerComponent implements OnInit {
   @ViewChild('addressModal') addressModal!: TemplateRef<any>;

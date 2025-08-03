@@ -1,0 +1,301 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      
+      <!-- Header -->
+      <div class="d-flex align-items-center mb-4">
+        <i class="bi bi-gear-fill me-3 text-primary" style="font-size: 2rem;"></i>
+        <div>
+          <h1 class="display-5 mb-1">Settings</h1>
+          <p class="text-muted mb-0">Manage your personal preferences and account settings</p>
+        </div>
+      </div>
+
+      <!-- Account Settings -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="bi bi-person-circle me-2"></i>
+            Account Settings
+          </h5>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="saveAccountSettings()">
+            
+            <!-- Notifications -->
+            <div class="mb-4">
+              <h6 class="text-muted mb-3">
+                <i class="bi bi-bell me-2"></i>
+                Notifications
+              </h6>
+              
+              <div class="form-check mb-2">
+                <input 
+                  class="form-check-input" 
+                  type="checkbox" 
+                  [(ngModel)]="accountSettings.emailNotifications"
+                  name="emailNotifications"
+                  id="emailNotifications">
+                <label class="form-check-label" for="emailNotifications">
+                  Email notifications
+                </label>
+                <small class="form-text text-muted d-block">
+                  Receive email updates about important account activities
+                </small>
+              </div>
+              
+              <div class="form-check mb-2">
+                <input 
+                  class="form-check-input" 
+                  type="checkbox" 
+                  [(ngModel)]="accountSettings.pushNotifications"
+                  name="pushNotifications"
+                  id="pushNotifications">
+                <label class="form-check-label" for="pushNotifications">
+                  Push notifications
+                </label>
+                <small class="form-text text-muted d-block">
+                  Receive browser notifications for real-time updates
+                </small>
+              </div>
+              
+              <div class="form-check mb-3">
+                <input 
+                  class="form-check-input" 
+                  type="checkbox" 
+                  [(ngModel)]="accountSettings.weeklyDigest"
+                  name="weeklyDigest"
+                  id="weeklyDigest">
+                <label class="form-check-label" for="weeklyDigest">
+                  Weekly digest email
+                </label>
+                <small class="form-text text-muted d-block">
+                  Receive a weekly summary of your account activity
+                </small>
+              </div>
+            </div>
+
+            <!-- Security -->
+            <div class="mb-4">
+              <h6 class="text-muted mb-3">
+                <i class="bi bi-shield-lock me-2"></i>
+                Security
+              </h6>
+              
+              <div class="form-check mb-2">
+                <input 
+                  class="form-check-input" 
+                  type="checkbox" 
+                  [(ngModel)]="accountSettings.twoFactorAuth"
+                  name="twoFactorAuth"
+                  id="twoFactorAuth">
+                <label class="form-check-label" for="twoFactorAuth">
+                  Two-factor authentication
+                </label>
+                <small class="form-text text-muted d-block">
+                  Add an extra layer of security to your account
+                </small>
+              </div>
+              
+              <div class="mb-3">
+                <label for="profileVisibility" class="form-label">Profile visibility</label>
+                <select 
+                  class="form-select" 
+                  [(ngModel)]="accountSettings.profileVisibility"
+                  name="profileVisibility"
+                  id="profileVisibility">
+                  <option *ngFor="let option of profileVisibilityOptions" [value]="option.value">
+                    {{ option.label }}
+                  </option>
+                </select>
+                <small class="form-text text-muted">
+                  Control who can see your profile information
+                </small>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-check-circle me-2"></i>
+              Save Account Settings
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Appearance Settings -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="bi bi-palette me-2"></i>
+            Appearance
+          </h5>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="saveAppearanceSettings()">
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="theme" class="form-label">Theme</label>
+                <select 
+                  class="form-select" 
+                  [(ngModel)]="appearanceSettings.theme"
+                  name="theme"
+                  id="theme">
+                  <option *ngFor="let option of themeOptions" [value]="option.value">
+                    {{ option.label }}
+                  </option>
+                </select>
+                <small class="form-text text-muted">
+                  Choose your preferred color theme
+                </small>
+              </div>
+              
+              <div class="col-md-6 mb-3">
+                <label for="language" class="form-label">Language</label>
+                <select 
+                  class="form-select" 
+                  [(ngModel)]="appearanceSettings.language"
+                  name="language"
+                  id="language">
+                  <option *ngFor="let option of languageOptions" [value]="option.value">
+                    {{ option.label }}
+                  </option>
+                </select>
+                <small class="form-text text-muted">
+                  Select your preferred language
+                </small>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-check-circle me-2"></i>
+              Save Appearance Settings
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Privacy Settings -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="bi bi-lock me-2"></i>
+            Privacy
+          </h5>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="savePrivacySettings()">
+            
+            <div class="form-check mb-2">
+              <input 
+                class="form-check-input" 
+                type="checkbox" 
+                [(ngModel)]="privacySettings.showEmail"
+                name="showEmail"
+                id="showEmail">
+              <label class="form-check-label" for="showEmail">
+                Show email address in profile
+              </label>
+            </div>
+            
+            <div class="form-check mb-2">
+              <input 
+                class="form-check-input" 
+                type="checkbox" 
+                [(ngModel)]="privacySettings.showProfile"
+                name="showProfile"
+                id="showProfile">
+              <label class="form-check-label" for="showProfile">
+                Make profile searchable
+              </label>
+            </div>
+            
+            <div class="form-check mb-2">
+              <input 
+                class="form-check-input" 
+                type="checkbox" 
+                [(ngModel)]="privacySettings.allowContactForm"
+                name="allowContactForm"
+                id="allowContactForm">
+              <label class="form-check-label" for="allowContactForm">
+                Allow contact through contact form
+              </label>
+            </div>
+            
+            <div class="form-check mb-3">
+              <input 
+                class="form-check-input" 
+                type="checkbox" 
+                [(ngModel)]="privacySettings.dataCollection"
+                name="dataCollection"
+                id="dataCollection">
+              <label class="form-check-label" for="dataCollection">
+                Allow anonymous usage data collection
+              </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-check-circle me-2"></i>
+              Save Privacy Settings
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Data Management -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="bi bi-database me-2"></i>
+            Data Management
+          </h5>
+        </div>
+        <div class="card-body">
+          
+          <div class="mb-4">
+            <h6 class="text-muted mb-3">Export Data</h6>
+            <p class="text-muted mb-3">
+              Download a copy of your settings and data for backup purposes.
+            </p>
+            <button type="button" class="btn btn-outline-primary" (click)="exportData()">
+              <i class="bi bi-download me-2"></i>
+              Export My Data
+            </button>
+          </div>
+
+          <hr>
+
+          <!-- Danger Zone -->
+          <div class="mb-4">
+            <h6 class="text-danger mb-3">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              Danger Zone
+            </h6>
+            
+            <div class="mb-3">
+              <p class="text-muted mb-2">
+                Reset all settings to their default values.
+              </p>
+              <button type="button" class="btn btn-outline-warning" (click)="clearAllData()">
+                <i class="bi bi-arrow-clockwise me-2"></i>
+                Clear All Data
+              </button>
+            </div>
+            
+            <div class="mb-3">
+              <p class="text-muted mb-2">
+                Permanently delete your account and all associated data.
+              </p>
+              <button type="button" class="btn btn-outline-danger" (click)="deleteAccount()">
+                <i class="bi bi-trash3 me-2"></i>
+                Delete Account
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
