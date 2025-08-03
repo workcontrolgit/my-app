@@ -7,7 +7,7 @@ import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 export interface ApprovalRule {
   requiredApprovers: string[];
   optionalApprovers: string[];
-  classifierSelectsSupervisor?: boolean;
+  managerSelectsSupervisor?: boolean;
 }
 
 export interface Approval {
@@ -75,7 +75,7 @@ export class ApprovalWorkflowComponent implements OnInit, OnChanges {
         isRequired: false
       },
       {
-        approverRole: 'Classifier',
+        approverRole: 'Manager',
         approverName: 'Bob Wilson',
         status: 'pending',
         timestamp: null,
@@ -87,7 +87,7 @@ export class ApprovalWorkflowComponent implements OnInit, OnChanges {
     ]
   };
 
-  @Input() currentUserRole: string = 'Classifier';
+  @Input() currentUserRole: string = 'Manager';
   @Input() readonly: boolean = false;
   @Input() showProgressBar: boolean = true;
   @Input() showOptionalApprovals: boolean = true;
@@ -163,7 +163,7 @@ export class ApprovalWorkflowComponent implements OnInit, OnChanges {
   getCurrentUserName(): string {
     const userMap: { [key: string]: string } = {
       'Supervisor': 'Jane Smith',
-      'Classifier': 'Bob Wilson',
+      'Manager': 'Bob Wilson',
       'Reviewer': 'John Doe'
     };
     return userMap[this.currentUserRole] || '';
@@ -178,11 +178,11 @@ export class ApprovalWorkflowComponent implements OnInit, OnChanges {
   getPdTypeDescription(pdType: string): string {
     switch (pdType) {
       case 'Custom PD':
-        return 'Requires approval from Supervisor and Classifier';
+        return 'Requires approval from Supervisor and Manager';
       case 'Standard PD':
-        return 'Requires approval from Classifier only';
+        return 'Requires approval from Manager only';
       case 'Expert and Consultant':
-        return 'Requires Classifier to select and get pre-approval from Supervisor';
+        return 'Requires Manager to select and get pre-approval from Supervisor';
       default:
         return '';
     }
@@ -312,7 +312,7 @@ export class ApprovalWorkflowComponent implements OnInit, OnChanges {
       approverName: selectedSupervisor,
       status: 'approved',
       timestamp: event.timestamp,
-      comments: 'Pre-approved through classifier selection process',
+      comments: 'Pre-approved through manager selection process',
       isRequired: true
     };
 
