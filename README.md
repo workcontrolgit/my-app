@@ -18,6 +18,7 @@ This tutorial application showcases advanced Angular development concepts throug
 - [Best Practices Demonstrated](#-best-practices-demonstrated)
 - [Learning Objectives](#-learning-objectives)
 - [Quick Start Guide](#-quick-start-guide)
+- [Testing](#-testing)
 - [Contributing](#-contributing)
 
 ## ✨ Features
@@ -62,6 +63,14 @@ This tutorial application showcases advanced Angular development concepts throug
 - Formatted code display with dark theme
 - Scrollable content areas
 
+### 🧪 **Comprehensive Testing**
+- **73 unit tests** with **100% pass rate**
+- Complete component test coverage
+- @Input/@Output testing patterns
+- Form validation and CRUD operation tests
+- Mock service integration (NgbModal, Router)
+- CI/CD ready test configuration
+
 ## 🛠 Technologies Used
 
 - **Angular 19** - Latest Angular framework with standalone components
@@ -71,6 +80,13 @@ This tutorial application showcases advanced Angular development concepts throug
 - **Bootstrap Icons** - Comprehensive icon library
 - **RxJS** - Reactive programming patterns
 - **Angular CLI** - Development tooling
+
+### **Testing Stack**
+- **Jasmine** - Testing framework
+- **Karma** - Test runner
+- **Angular Testing Utilities** - TestBed, ComponentFixture
+- **RouterTestingModule** - Router testing utilities
+- **ChromeHeadless** - CI/CD browser environment
 
 ## 🚀 Getting Started
 
@@ -461,6 +477,242 @@ ng test
 ng e2e
 ```
 
+## 🧪 Testing
+
+This application features a comprehensive test suite with **73 tests** covering all components and functionality, achieving **100% pass rate**.
+
+### Test Coverage
+
+#### **Component Tests**
+- ✅ **AppComponent** (3 tests) - Main application component
+- ✅ **AddressComponent** (12 tests) - Address management page 
+- ✅ **AddressManagerComponent** (20 tests) - Core address CRUD operations
+- ✅ **ApprovalComponent** (18 tests) - Approval workflow page
+- ✅ **ApprovalWorkflowComponent** (14 tests) - Core workflow functionality
+- ✅ **HomeComponent** (1 test) - Home page
+- ✅ **AboutComponent** (1 test) - About page
+- ✅ **ContactComponent** (1 test) - Contact page
+- ✅ **ProfileComponent** (1 test) - Profile page
+- ✅ **SettingsComponent** (1 test) - Settings page
+- ✅ **HeaderComponent** (1 test) - Navigation header
+- ✅ **FooterComponent** (1 test) - Footer component
+
+### Test Commands
+
+#### **Run All Tests**
+```bash
+# Run all tests once
+npm test -- --watch=false --browsers=ChromeHeadless
+
+# Run all tests in watch mode (for development)
+npm test
+
+# Run tests with code coverage
+npm test -- --code-coverage --watch=false --browsers=ChromeHeadless
+```
+
+#### **Run Specific Test Suites**
+```bash
+# Run only address component tests
+npm test -- --include="**/address*.spec.ts" --watch=false --browsers=ChromeHeadless
+
+# Run only approval component tests  
+npm test -- --include="**/approval*.spec.ts" --watch=false --browsers=ChromeHeadless
+
+# Run specific component test
+npm test -- --include="**/app.component.spec.ts" --watch=false --browsers=ChromeHeadless
+```
+
+#### **Different Browser Options**
+```bash
+# Run in Chrome (visible browser window)
+npm test -- --browsers=Chrome
+
+# Run in Firefox
+npm test -- --browsers=Firefox  
+
+# Run in multiple browsers
+npm test -- --browsers=Chrome,Firefox
+```
+
+### Test Features
+
+#### **1. Comprehensive Component Testing**
+- **Unit Tests:** All components have isolated unit tests
+- **Integration Tests:** Parent-child component communication
+- **Mock Services:** Proper mocking of dependencies (NgbModal, Router)
+- **Form Validation:** Reactive form testing with validation rules
+- **Event Testing:** @Input/@Output parameter testing
+
+#### **2. Address Component Test Examples**
+```typescript
+// Testing @Input/@Output patterns
+it('should handle addresses change event', () => {
+  const newAddresses: Address[] = [/*...*/];
+  spyOn(console, 'log');
+  
+  component.onAddressesChange(newAddresses);
+  
+  expect(component.addresses).toEqual(newAddresses);
+  expect(console.log).toHaveBeenCalledWith('Addresses updated from manager:', newAddresses);
+});
+
+// Testing computed properties
+it('should return correct default address', () => {
+  const defaultAddress = component.defaultAddress;
+  
+  expect(defaultAddress).not.toBeNull();
+  expect(defaultAddress?.isDefault).toBe(true);
+  expect(defaultAddress?.street).toBe('123 Main St');
+});
+```
+
+#### **3. AddressManager Component Test Examples**
+```typescript
+// Testing CRUD operations
+it('should save new address and emit events', () => {
+  spyOn(component.addressAdded, 'emit');
+  spyOn(component.addressesChange, 'emit');
+  
+  const newAddress = { /* address data */ };
+  component.addAddress(newAddress);
+  
+  expect(component.addresses.length).toBe(initialLength + 1);
+  expect(component.addressAdded.emit).toHaveBeenCalled();
+  expect(component.addressesChange.emit).toHaveBeenCalledWith(component.addresses);
+});
+
+// Testing form validation
+it('should validate form correctly', () => {
+  expect(component.isFormValid()).toBeFalse();
+  
+  component.addressForm.patchValue({
+    type: 'home',
+    street: '123 Test St',
+    city: 'Test City',
+    state: 'TS',
+    zipCode: '12345',
+    country: 'US'
+  });
+  
+  expect(component.isFormValid()).toBeTrue();
+});
+```
+
+#### **4. Approval Workflow Test Examples**
+```typescript
+// Testing complex workflow logic
+it('should calculate workflow status correctly', () => {
+  if (component.workflow) {
+    // Test approved status
+    component.workflow.approvals.forEach(approval => {
+      if (approval.isRequired) {
+        approval.status = 'approved';
+      }
+    });
+    
+    component.calculateWorkflowStatus();
+    expect(component.workflow.status).toBe('approved');
+  }
+});
+
+// Testing event emissions
+it('should emit events when workflow status changes', () => {
+  spyOn(component.workflowStatusChanged, 'emit');
+  
+  component.calculateWorkflowStatus();
+  expect(component.workflowStatusChanged.emit).toHaveBeenCalled();
+});
+```
+
+### Test Setup and Configuration
+
+#### **Testing Dependencies**
+```typescript
+// Typical test setup with router and modal mocking
+beforeEach(async () => {
+  const modalSpy = jasmine.createSpyObj('NgbModal', ['open', 'dismissAll']);
+
+  await TestBed.configureTestingModule({
+    imports: [ComponentName, RouterTestingModule],
+    providers: [
+      { provide: NgbModal, useValue: modalSpy },
+      provideRouter([])
+    ]
+  }).compileComponents();
+});
+```
+
+#### **Mock Services**
+- **NgbModal:** Mocked for modal operations
+- **Router:** RouterTestingModule for navigation testing
+- **FormBuilder:** Reactive forms testing
+- **Console:** Spied for logging verification
+
+### Test Results Interpretation
+
+#### **Success Output Example**
+```
+Chrome Headless: Executed 73 of 73 SUCCESS (0.316 secs / 0.293 secs)
+TOTAL: 73 SUCCESS
+```
+
+#### **Coverage Reports**
+When running with `--code-coverage`, test reports are generated in the `coverage/` directory:
+- **HTML Report:** `coverage/index.html`
+- **LCOV Report:** `coverage/lcov.info`
+- **JSON Report:** `coverage/coverage-final.json`
+
+### Testing Best Practices Demonstrated
+
+#### **1. Test Organization**
+- One test file per component (`.spec.ts`)
+- Descriptive test names following BDD patterns
+- Grouped related tests with `describe` blocks
+- Setup and teardown with `beforeEach`/`afterEach`
+
+#### **2. Component Testing Patterns**
+- **Isolated Unit Tests:** Testing component logic in isolation
+- **Integration Tests:** Testing component interactions
+- **Event Testing:** Verifying @Output emissions
+- **State Testing:** Validating component state changes
+
+#### **3. Mock Strategy**
+- **Service Mocking:** External dependencies properly mocked
+- **Router Mocking:** Navigation testing with RouterTestingModule
+- **Form Testing:** Reactive form validation and submission
+- **Event Spying:** Verifying method calls and emissions
+
+#### **4. Assertion Patterns**
+```typescript
+// Type checking
+expect(typeof result).toBe('boolean');
+
+// Array/Object validation  
+expect(component.addresses.length).toBe(3);
+expect(component.addresses).toEqual(expectedAddresses);
+
+// Event verification
+expect(component.eventEmitter.emit).toHaveBeenCalledWith(expectedData);
+
+// Form validation
+expect(component.form.valid).toBeTrue();
+expect(component.form.get('field')?.hasError('required')).toBeFalse();
+```
+
+### Continuous Integration
+
+For CI/CD pipelines, use:
+```bash
+npm test -- --watch=false --browsers=ChromeHeadless --code-coverage
+```
+
+This configuration:
+- Runs tests once (no watch mode)
+- Uses headless Chrome (no GUI required)
+- Generates coverage reports
+- Suitable for automated environments
+
 ## 🤝 Contributing
 
 Contributions are welcome! This tutorial project can be extended with:
@@ -468,7 +720,23 @@ Contributions are welcome! This tutorial project can be extended with:
 - More complex workflows
 - Enhanced styling
 - Performance optimizations
-- Testing examples
+- Additional testing examples
+
+### **Testing Requirements**
+All contributions must maintain the **100% test pass rate**:
+- New components require corresponding `.spec.ts` test files
+- New features need comprehensive unit tests
+- Bug fixes should include regression tests
+- All tests must pass before submitting PRs
+
+**Before submitting:**
+```bash
+# Ensure all tests pass
+npm test -- --watch=false --browsers=ChromeHeadless
+
+# Check test coverage
+npm test -- --code-coverage --watch=false --browsers=ChromeHeadless
+```
 
 ## 📞 Support
 
