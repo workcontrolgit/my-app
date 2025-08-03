@@ -1,0 +1,331 @@
+<!-- approval-workflow.component.html -->
+<div class="container-fluid py-4">
+  <!-- Header -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="mb-0">Position Description Approval</h4>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-8">
+              <h5>{{ workflow.pdTitle }}</h5>
+              <p class="mb-1"><strong>PD ID:</strong> {{ workflow.pdId }}</p>
+              <p class="mb-1"><strong>Type:</strong> {{ workflow.pdType }}</p>
+              <p class="mb-1"><strong>Submitted by:</strong> {{ workflow.submittedBy }}</p>
+              <p class="mb-1"><strong>Submitted:</strong> {{ formatDate(workflow.submittedDate) }}</p>
+              <div class="alert alert-info p-2 mt-2">
+                <small><i class="bi-info-circle"></i> {{ getPdTypeDescription(workflow.pdType) }}</small>
+              </div>
+            </div>
+            <div class="col-md-4 text-md-end">
+              <span class="badge fs-6 px-3 py-2" 
+                    [ngClass]="getStatusBadgeClass(workflow.status)">
+                <i [class]="getStatusIcon(workflow.status)"></i>
+                {{ workflow.status | titlecase }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress Overview -->
+  <div class="row mb-4" *ngIf="showProgressBar">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Approval Progress</h5>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span>Required Approvals</span>
+            <span class="fw-bold">{{ completedRequired }} / {{ totalRequired }} Complete</span>
+          </div>
+          <ngb-progressbar 
+            [value]="progressPercentage" 
+            [striped]="true" 
+            [animated]="workflow.status === 'pending'"
+            type="success">
+          </ngb-progressbar>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Required Approvals -->
+  <div class="row mb-4" *ngIf="requiredApprovals.length > 0">
+    <div class="col-12">
+      <h5 class="mb-3">Required Approvals</h5>
+      <div class="row">
+        <div class="col-md-6 mb-3" *ngFor="let approval of requiredApprovals" 
+             [ngClass]="{'col-12': compactMode}">
+          <div class="card h-100" 
+               [ngClass]="{'border-success': approval.status === 'approved', 
+                          'border-danger': approval.status === 'rejected',
+                          'border-warning': approval.status === 'pending'}">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <span class="fw-bold">{{ approval.approverRole }}</span>
+              <span class="badge" [ngClass]="getStatusBadgeClass(approval.status)">
+                <i [class]="getStatusIcon(approval.status)"></i>
+                {{ approval.status | titlecase }}
+              </span>
+            </div>
+            <div class="card-body">
+              <p class="card-text mb-2">
+                <strong>Approver:</strong> {{ approval.approverName }}
+              </p>
+              
+              <div *ngIf="approval.timestamp" class="mb-2">
+                <small class="text-muted">
+                  <strong>{{ approval.status | titlecase }} on:</strong> 
+                  {{ formatDate(approval.timestamp) }}
+                </small>
+              </div>
+
+              <div *ngIf="approval.comments" class="mb-3">
+                <small class="text-muted d-block mb-1"><strong>Comments:</strong></small>
+                <div class="alert alert-light p-2 mb-0">
+                  <small>{{ approval.comments }}</small>
+                </div>
+              </div>
+
+              <!-- Actions for current user -->
+              <div *ngIf="canUserApprove(approval)" class="mt-3">
+                <!-- Show supervisor selection for Expert and Consultant -->
+                <div *ngIf="needsSupervisorSelection(approval)" class="mb-3">
+                  <button type="button" 
+                          class="btn btn-primary me-2" 
+                          (click)="openSupervisorSelectionModal(supervisorSelectionModal, approval)"
+                          [disabled]="readonly">
+                    <i class="bi-person-plus"></i> Select Supervisor & Approve
+                  </button>
+                  <button type="button" 
+                          class="btn btn-danger" 
+                          (click)="openRejectionModal(rejectionModal, approval)"
+                          [disabled]="readonly">
+                    <i class="bi-x-lg"></i> Reject
+                  </button>
+                </div>
+                
+                <!-- Standard approve/reject for other cases -->
+                <div *ngIf="!needsSupervisorSelection(approval)">
+                  <button type="button" 
+                          class="btn btn-success me-2" 
+                          (click)="openApprovalModal(approvalModal, approval)"
+                          [disabled]="readonly">
+                    <i class="bi-check-lg"></i> Approve
+                  </button>
+                  <button type="button" 
+                          class="btn btn-danger" 
+                          (click)="openRejectionModal(rejectionModal, approval)"
+                          [disabled]="readonly">
+                    <i class="bi-x-lg"></i> Reject
+                  </button>
+                </div>
+              </div>
+
+              <div *ngIf="approval.status === 'pending' && !canUserApprove(approval)" 
+                   class="mt-3">
+                <small class="text-muted">
+                  <i class="bi-clock"></i> Waiting for {{ approval.approverName }}
+                  <span *ngIf="approval.needsSupervisorSelection"> to select supervisor</span>
+                </small>
+              </div>
+
+              <!-- Show selected supervisor info for Expert and Consultant -->
+              <div *ngIf="approval.selectedSupervisor" class="mt-2">
+                <div class="alert alert-success p-2">
+                  <small><strong>Selected Supervisor:</strong> {{ approval.selectedSupervisor }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Optional Approvals -->
+  <div class="row mb-4" *ngIf="optionalApprovals.length > 0 && showOptionalApprovals">
+    <div class="col-12">
+      <h5 class="mb-3">Optional Approvals</h5>
+      <div class="row">
+        <div class="col-md-6 mb-3" *ngFor="let approval of optionalApprovals"
+             [ngClass]="{'col-12': compactMode}">
+          <div class="card h-100 border-info">
+            <div class="card-header d-flex justify-content-between align-items-center bg-light">
+              <span class="fw-bold">{{ approval.approverRole }} <small class="text-muted">(Optional)</small></span>
+              <span class="badge" [ngClass]="getStatusBadgeClass(approval.status)">
+                <i [class]="getStatusIcon(approval.status)"></i>
+                {{ approval.status | titlecase }}
+              </span>
+            </div>
+            <div class="card-body">
+              <p class="card-text mb-2">
+                <strong>Approver:</strong> {{ approval.approverName }}
+              </p>
+              
+              <div *ngIf="approval.timestamp" class="mb-2">
+                <small class="text-muted">
+                  <strong>{{ approval.status | titlecase }} on:</strong> 
+                  {{ formatDate(approval.timestamp) }}
+                </small>
+              </div>
+
+              <div *ngIf="approval.comments" class="mb-3">
+                <small class="text-muted d-block mb-1"><strong>Comments:</strong></small>
+                <div class="alert alert-light p-2 mb-0">
+                  <small>{{ approval.comments }}</small>
+                </div>
+              </div>
+
+              <!-- Actions for current user -->
+              <div *ngIf="canUserApprove(approval)" class="mt-3">
+                <button type="button" 
+                        class="btn btn-success me-2" 
+                        (click)="openApprovalModal(approvalModal, approval)"
+                        [disabled]="readonly">
+                  <i class="bi-check-lg"></i> Approve
+                </button>
+                <button type="button" 
+                        class="btn btn-danger" 
+                        (click)="openRejectionModal(rejectionModal, approval)"
+                        [disabled]="readonly">
+                  <i class="bi-x-lg"></i> Reject
+                </button>
+              </div>
+
+              <div *ngIf="approval.status === 'pending' && !canUserApprove(approval)" 
+                   class="mt-3">
+                <small class="text-muted">
+                  <i class="bi-clock"></i> Waiting for {{ approval.approverName }}
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Supervisor Selection Modal for Expert and Consultant -->
+<ng-template #supervisorSelectionModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Select Supervisor for Pre-Approval</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+  <form [formGroup]="supervisorSelectionForm" (ngSubmit)="submitSupervisorSelection()">
+    <div class="modal-body">
+      <div class="alert alert-info">
+        <i class="bi-info-circle"></i>
+        For Expert and Consultant positions, you need to select a supervisor who will provide pre-approval.
+      </div>
+      
+      <div class="mb-3">
+        <label for="supervisorSelect" class="form-label">
+          Select Supervisor <span class="text-danger">*</span>
+        </label>
+        <select class="form-select" 
+                id="supervisorSelect" 
+                formControlName="selectedSupervisor"
+                [class.is-invalid]="supervisorSelectionControl?.invalid && supervisorSelectionControl?.touched">
+          <option value="">-- Choose Supervisor --</option>
+          <option *ngFor="let supervisor of workflow.availableSupervisors" 
+                  [value]="supervisor">
+            {{ supervisor }}
+          </option>
+        </select>
+        <div class="invalid-feedback" *ngIf="supervisorSelectionControl?.invalid && supervisorSelectionControl?.touched">
+          Please select a supervisor for pre-approval
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="supervisorComments" class="form-label">Comments (Optional)</label>
+        <textarea class="form-control" 
+                  id="supervisorComments" 
+                  rows="3" 
+                  formControlName="comments"
+                  placeholder="Add any comments about the supervisor selection..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>
+      <button type="submit" 
+              class="btn btn-primary" 
+              [disabled]="supervisorSelectionForm.invalid">
+        <i class="bi-person-check"></i> Select & Approve
+      </button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- Approval Modal -->
+<ng-template #approvalModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Approve Position Description</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+  <form [formGroup]="approvalForm" (ngSubmit)="submitApproval()">
+    <div class="modal-body">
+      <p>Are you sure you want to approve this position description?</p>
+      <div class="mb-3">
+        <label for="approvalComments" class="form-label">Comments (Optional)</label>
+        <textarea class="form-control" 
+                  id="approvalComments" 
+                  rows="3" 
+                  formControlName="comments"
+                  placeholder="Add any comments about your approval..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>
+      <button type="submit" class="btn btn-success">
+        <i class="bi-check-lg"></i> Approve
+      </button>
+    </div>
+  </form>
+</ng-template>
+
+<!-- Rejection Modal -->
+<ng-template #rejectionModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Reject Position Description</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+  <form [formGroup]="rejectionForm" (ngSubmit)="submitRejection()">
+    <div class="modal-body">
+      <div class="alert alert-warning">
+        <i class="bi-exclamation-triangle"></i>
+        Rejecting this position description will require resubmission after addressing your concerns.
+      </div>
+      <div class="mb-3">
+        <label for="rejectionComments" class="form-label">
+          Rejection Reason <span class="text-danger">*</span>
+        </label>
+        <textarea class="form-control" 
+                  id="rejectionComments" 
+                  rows="4" 
+                  formControlName="comments"
+                  placeholder="Please provide specific reasons for rejection..."
+                  [class.is-invalid]="rejectionCommentsControl?.invalid && rejectionCommentsControl?.touched"></textarea>
+        <div class="invalid-feedback" *ngIf="rejectionCommentsControl?.invalid && rejectionCommentsControl?.touched">
+          {{ getRejectionErrorMessage() }}
+        </div>
+        <div class="form-text">Please provide clear feedback to help improve the position description.</div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">Cancel</button>
+      <button type="submit" 
+              class="btn btn-danger" 
+              [disabled]="!isRejectionFormValid()">
+        <i class="bi-x-lg"></i> Reject
+      </button>
+    </div>
+  </form>
+</ng-template>
