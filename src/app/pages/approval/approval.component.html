@@ -104,6 +104,30 @@
         </div>
       </div>
 
+      <!-- Workflow Data JSON Display -->
+      <div class="card shadow-sm mt-4">
+        <div class="card-header bg-dark text-white">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">
+              <i class="bi bi-code-square"></i> Approval Workflow Data (JSON)
+            </h5>
+            <div class="d-flex gap-2">
+              <button class="btn btn-outline-light btn-sm" (click)="refreshWorkflowData()">
+                <i class="bi bi-arrow-clockwise"></i> Refresh
+              </button>
+              <ng-container *ngIf="approvalSummary">
+                <span class="badge bg-warning">{{ approvalSummary.pending }} pending</span>
+                <span class="badge bg-success">{{ approvalSummary.approved }} approved</span>
+                <span class="badge bg-danger" *ngIf="approvalSummary.rejected > 0">{{ approvalSummary.rejected }} rejected</span>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <pre class="json-display mb-0"><code>{{ workflowJson }}</code></pre>
+        </div>
+      </div>
+
       <!-- Tutorial Blog Info Section -->
       <div class="alert alert-info mt-4" role="alert">
         <h6 class="alert-heading">
@@ -111,7 +135,7 @@
         </h6>
         <p class="mb-2">
           This Approval Workflow page demonstrates advanced Angular component architecture 
-          and workflow management patterns. Key concepts showcased include:
+          and workflow management patterns. The workflow manager and JSON display showcase:
         </p>
         <ul class="mb-0">
           <li>Workflow state management and visualization</li>
@@ -119,6 +143,8 @@
           <li>Dashboard design with statistical cards</li>
           <li>Enterprise-level approval processes</li>
           <li>Real-time status updates and notifications</li>
+          <li><strong>Complex data structure visualization and JSON formatting</strong></li>
+          <li><strong>Dynamic badge display based on workflow status</strong></li>
         </ul>
       </div>
     </div>
