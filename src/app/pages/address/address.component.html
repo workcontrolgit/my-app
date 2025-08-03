@@ -34,7 +34,13 @@
           </h5>
         </div>
         <div class="card-body">
-          <app-address-manager></app-address-manager>
+          <app-address-manager 
+            [addresses]="addresses"
+            (addressesChange)="onAddressesChange($event)"
+            (addressAdded)="onAddressAdded($event)"
+            (addressUpdated)="onAddressUpdated($event)"
+            (addressDeleted)="onAddressDeleted($event)">
+          </app-address-manager>
         </div>
       </div>
 
@@ -46,10 +52,10 @@
               <i class="bi bi-code-square"></i> Address Collection (JSON)
             </h5>
             <div class="d-flex gap-2">
-              <button class="btn btn-outline-light btn-sm" (click)="refreshAddresses()">
-                <i class="bi bi-arrow-clockwise"></i> Refresh
-              </button>
-              <span class="badge bg-info">{{ addresses.length }} addresses</span>
+              <span class="badge bg-info">{{ addressCount }} addresses</span>
+              @if (defaultAddress) {
+                <span class="badge bg-success">Default: {{ defaultAddress.type }}</span>
+              }
             </div>
           </div>
         </div>
@@ -73,7 +79,8 @@
           <li>Form handling and validation</li>
           <li>Responsive layout implementation</li>
           <li><strong>Real-time data visualization and JSON formatting</strong></li>
-          <li><strong>Component communication using ViewChild</strong></li>
+          <li><strong>Component communication using &#64;Input/&#64;Output pattern</strong></li>
+          <li><strong>Event-driven data flow between parent and child components</strong></li>
         </ul>
       </div>
     </div>
