@@ -22,10 +22,34 @@ export class AppComponent {
   title = 'my-app';
   isMenuCollapsed = true;
 
+  toggleMenu(): void {
+    this.isMenuCollapsed = !this.isMenuCollapsed;
+  }
+
+  closeMenuOnMobile(): void {
+    // Close menu on mobile when navigation item is clicked
+    if (window.innerWidth < 992) {
+      this.isMenuCollapsed = true;
+    }
+  }
+
   logout(event: Event): void {
     event.preventDefault();
-    // Implement logout logic here
-    console.log('Logout clicked');
-    // Example: this.authService.logout();
-  }  
+    // Close any open dropdowns
+    this.isMenuCollapsed = true;
+    
+    // Add subtle animation before logout
+    const target = event.target as HTMLElement;
+    target.style.transform = 'scale(0.95)';
+    
+    setTimeout(() => {
+      // Implement logout logic here
+      console.log('Logout clicked');
+      // Example: this.authService.logout();
+      // this.router.navigate(['/login']);
+      
+      // Reset button animation
+      target.style.transform = 'scale(1)';
+    }, 150);
+  }
 }

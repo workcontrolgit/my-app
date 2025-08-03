@@ -1,7 +1,6 @@
 // app.routes.ts
 import { Routes } from '@angular/router';
 
-
 export const routes: Routes = [
   {
     path: '',
@@ -21,19 +20,19 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/contact/contact.component').then(m => m.ContactComponent)
   },
   {
+    path: 'address',
+    loadComponent: () => import('./pages/address/address.component').then(m => m.AddressComponent)
+  },
+  {
     path: 'profile',
     loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent)
   },
   {
     path: 'settings',
-    loadComponent: () => import('./core/components/address/address-manager.component').then(m => m.AddressManagerComponent)
-  },
-  {
-    path: 'features',
-    loadChildren: () => import('./core/components/address/address-manager.component').then(m => m.AddressManagerComponent)
+    loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent)
   },
   {
     path: '**',
-    loadComponent: () => import('./core/components/address/address-manager.component').then(m => m.AddressManagerComponent)
+    redirectTo: '/home'
   }
 ];

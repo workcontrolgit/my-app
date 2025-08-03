@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import {AddressManagerComponent} from '../../core/components/address/address-manager.component';
+import {ApprovalWorkflowComponent} from '../../core/components/workflow/approval-workflow/approval-workflow.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AddressManagerComponent, ApprovalWorkflowComponent],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
