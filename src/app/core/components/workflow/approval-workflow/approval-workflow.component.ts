@@ -32,35 +32,7 @@ export class ApprovalWorkflowComponent implements OnInit, OnChanges {
   private formBuilder = inject(FormBuilder);
 
   // Input properties for reusability
-  @Input() workflow: ApprovalWorkflow = {
-    pdId: 'PD-2025-001',
-    pdTitle: 'Senior Software Engineer - Frontend Development',
-    pdType: 'Expert and Consultant',
-    status: 'pending',
-    submittedBy: 'HR Department',
-    submittedDate: '2025-07-30T09:00:00Z',
-    availableSupervisors: ['Alice Johnson', 'Michael Brown', 'Sarah Davis', 'Robert Wilson'],
-    approvals: [
-      {
-        approverRole: 'Reviewer',
-        approverName: 'John Doe',
-        status: 'approved',
-        timestamp: '2025-07-31T10:00:00Z',
-        comments: 'Position requirements are well defined and align with team needs.',
-        isRequired: false
-      },
-      {
-        approverRole: 'Manager',
-        approverName: 'Bob Wilson',
-        status: 'pending',
-        timestamp: null,
-        comments: null,
-        isRequired: true,
-        needsSupervisorSelection: true,
-        selectedSupervisor: undefined
-      }
-    ]
-  };
+  @Input() workflow: ApprovalWorkflow | null = null;
 
   @Input() currentUserRole: string = 'Manager';
   @Input() readonly: boolean = false;
@@ -73,6 +45,9 @@ export class ApprovalWorkflowComponent implements OnInit, OnChanges {
   @Output() rejectionSubmitted = new EventEmitter<ApprovalEvent>();
   @Output() supervisorSelected = new EventEmitter<ApprovalEvent>();
   @Output() workflowStatusChanged = new EventEmitter<'pending' | 'approved' | 'rejected'>();
+  @Output() workflowUpdated = new EventEmitter<ApprovalWorkflow>();
+  @Output() approvalAdded = new EventEmitter<Approval>();
+  @Output() approvalUpdated = new EventEmitter<Approval>();
 
   // Forms
   approvalForm!: FormGroup;
@@ -205,7 +180,7 @@ export class ApprovalWorkflowComponent implements OnInit, OnChanges {
   }
 
   submitApproval(): void {
-    if (!this.selectedApproval || this.approvalForm.invalid) {
+    if (!this.selectedApproval || this.approvalForm.invalid || !this.workflow) {
       return;
     }
 
@@ -226,13 +201,15 @@ export class ApprovalWorkflowComponent implements OnInit, OnChanges {
     this.calculateWorkflowStatus();
     this.modalService.dismissAll();
     
-    // Emit event for parent component
+    // Emit events for parent component
     this.approvalSubmitted.emit(event);
+    this.approvalUpdated.emit({ ...this.selectedApproval });
+    this.workflowUpdated.emit({ ...this.workflow });
     this.selectedApproval = null;
   }
 
   submitRejection(): void {
-    if (!this.selectedApproval || this.rejectionForm.invalid) {
+    if (!this.selectedApproval || this.rejectionForm.invalid || !this.workflow) {
       return;
     }
     
@@ -253,13 +230,15 @@ export class ApprovalWorkflowComponent implements OnInit, OnChanges {
     this.calculateWorkflowStatus();
     this.modalService.dismissAll();
     
-    // Emit event for parent component
+    // Emit events for parent component
     this.rejectionSubmitted.emit(event);
+    this.approvalUpdated.emit({ ...this.selectedApproval });
+    this.workflowUpdated.emit({ ...this.workflow });
     this.selectedApproval = null;
   }
 
   submitSupervisorSelection(): void {
-    if (!this.selectedApproval || this.supervisorSelectionForm.invalid) {
+    if (!this.selectedApproval || this.supervisorSelectionForm.invalid || !this.workflow) {
       return;
     }
 
@@ -296,8 +275,11 @@ export class ApprovalWorkflowComponent implements OnInit, OnChanges {
     this.calculateWorkflowStatus();
     this.modalService.dismissAll();
     
-    // Emit event for parent component
+    // Emit events for parent component
     this.supervisorSelected.emit(event);
+    this.approvalUpdated.emit({ ...this.selectedApproval });
+    this.approvalAdded.emit({ ...supervisorApproval });
+    this.workflowUpdated.emit({ ...this.workflow });
     this.selectedApproval = null;
   }
 
