@@ -1,0 +1,146 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <!-- Page Header -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h1 class="h2 mb-1">{{ title }}</h1>
+          <p class="text-muted mb-0">Add and manage departments using the modal selector</p>
+        </div>
+        <div class="d-flex align-items-center">
+          <i class="bi bi-building-fill text-primary fs-3"></i>
+        </div>
+      </div>
+
+      <!-- Breadcrumb Navigation -->
+      <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a routerLink="/" class="text-decoration-none">
+              <i class="bi bi-house-door"></i> Home
+            </a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">
+            <i class="bi bi-building"></i> Department
+          </li>
+        </ol>
+      </nav>
+
+      <!-- Selected Department Display -->
+      <div class="card shadow-sm" *ngIf="selectedDepartment">
+        <div class="card-header bg-success text-white">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">
+              <i class="bi bi-check-circle"></i> Department
+            </h5>
+            <button 
+              type="button" 
+              class="btn btn-outline-light btn-sm"
+              (click)="clearDepartment()">
+              <i class="bi bi-x-circle"></i> Clear Selection
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <span class="badge bg-secondary font-monospace me-3 fs-6">{{ selectedDepartment.code }}</span>
+            <div class="flex-grow-1">
+              <h6 class="mb-1 text-success">{{ selectedDepartment.name }}</h6>
+              <small class="text-muted">{{ selectedDepartment.bureauName }}</small>
+              <span class="badge bg-light text-dark ms-2" *ngIf="selectedDepartment.abbreviation">
+                {{ selectedDepartment.abbreviation }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- No Selection State -->
+      <div class="card shadow-sm" *ngIf="!selectedDepartment">
+        <div class="card-body text-center py-5">
+          <i class="bi bi-building text-muted display-4 mb-3"></i>
+          <h5 class="text-muted mb-3">No Department Selected</h5>
+          <p class="text-muted mb-4">Click on Select Department</p>
+          <button 
+            type="button" 
+            class="btn btn-primary"
+            (click)="openDepartmentModal(departmentModal)">
+            <i class="bi bi-plus-circle me-2"></i> Select Department
+          </button>
+        </div>
+      </div>
+
+
+      <!-- Department JSON Display -->
+      <div class="card shadow-sm mt-4">
+        <div class="card-header bg-dark text-white">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">
+              <i class="bi bi-code-square"></i> Selected Department (JSON)
+            </h5>
+            <div class="d-flex gap-2">
+              <span class="badge bg-info" *ngIf="hasSelectedDepartment">Department Selected</span>
+              <span class="badge bg-secondary" *ngIf="!hasSelectedDepartment">No Selection</span>
+              <button 
+                class="btn btn-outline-light btn-sm" 
+                (click)="clearDepartment()"
+                *ngIf="hasSelectedDepartment">
+                <i class="bi bi-x-circle"></i> Clear
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <pre class="json-display mb-0"><code>{{ departmentJson }}</code></pre>
+        </div>
+      </div>
+
+      <!-- Tutorial Blog Info Section -->
+      <div class="alert alert-info mt-4" role="alert">
+        <h6 class="alert-heading">
+          <i class="bi bi-info-circle"></i> Tutorial Blog Content
+        </h6>
+        <p class="mb-2">
+          This Department Management page demonstrates how to integrate complex selector components 
+          into Angular applications using modals. The modal-based Department Selector showcases:
+        </p>
+        <ul class="mb-0">
+          <li>Modal integration with NgBootstrap for clean UI patterns</li>
+          <li>Advanced search and filtering functionality in modal context</li>
+          <li>Accessible dropdown interfaces with ARIA support</li>
+          <li>Complex data structures and hierarchical organization</li>
+          <li>Real-time search with highlighting and keyboard navigation</li>
+          <li><strong>Component communication using modal results</strong></li>
+          <li><strong>Professional data selection patterns for forms</strong></li>
+          <li><strong>User experience patterns for single-selection workflows</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Department Selection Modal -->
+<ng-template #departmentModal let-modal>
+  <div class="modal-header bg-primary text-white">
+    <h4 class="modal-title">
+      <i class="bi bi-building me-2"></i> Select Department
+    </h4>
+    <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="modal.dismiss()"></button>
+  </div>
+  <div class="modal-body p-4">
+    <div class="alert alert-info mb-4">
+      <i class="bi bi-info-circle me-2"></i>
+      <strong>Instructions:</strong> Search and select a department from the list below. 
+      The selected department will be added to your form.
+    </div>
+    
+    <app-department-selector 
+      (departmentSelected)="onDepartmentSelected($event, modal)">
+    </app-department-selector>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss()">
+      <i class="bi bi-x-circle me-2"></i> Cancel
+    </button>
+  </div>
+</ng-template>

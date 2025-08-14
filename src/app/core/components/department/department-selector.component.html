@@ -1,0 +1,189 @@
+<div class="department-selector">
+  <div class="form-group">
+    <label for="departmentSearch" class="form-label fw-semibold">
+      Select Department <span class="text-danger">*</span>
+    </label>
+    
+    <div class="dropdown" [class.show]="showDropdown">
+      <input
+        id="departmentSearch"
+        type="text"
+        class="form-control"
+        [(ngModel)]="searchText"
+        (input)="onSearchChange()"
+        (focus)="onFocus()"
+        (blur)="onBlur()"
+        (keydown)="onKeyDown($event)"
+        placeholder="Search by department, bureau, code, or abbreviation..."
+        autocomplete="off"
+        [class.is-invalid]="isRequired && !selectedDepartment"
+        aria-describedby="departmentHelp"
+        role="combobox"
+        [attr.aria-expanded]="showDropdown"
+        aria-autocomplete="list"
+      />
+      
+      <div 
+        class="dropdown-menu w-100" 
+        [class.show]="showDropdown && (filteredDepartments.length > 0 || searchText.length > 0)"
+        role="listbox"
+        aria-label="Department options">
+        
+        <!-- Show filtered results -->
+        <div *ngFor="let dept of filteredDepartments; let i = index" 
+             class="dropdown-item py-2"
+             [class.active]="i === activeIndex"
+             (mousedown)="selectDepartment(dept)"
+             (mouseover)="activeIndex = i"
+             role="option"
+             [attr.aria-selected]="i === activeIndex"
+             [attr.id]="'dept-option-' + i">
+          <div class="d-flex align-items-start">
+            <!-- 6-digit code -->
+            <div class="dept-code me-3 mt-1">
+              <span class="badge bg-secondary font-monospace" 
+                    [attr.aria-label]="'Department code ' + dept.code">
+                {{ dept.code }}
+              </span>
+            </div>
+            <!-- Department info -->
+            <div class="flex-grow-1">
+              <div class="fw-medium text-primary department-name" 
+                   [innerHTML]="highlightMatch(dept.name, searchText)">
+              </div>
+              <small class="text-muted bureau-name">{{ dept.bureauName }}</small>
+            </div>
+            <!-- Abbreviation -->
+            <div class="abbreviation-container" *ngIf="dept.abbreviation">
+              <span class="badge bg-light text-dark ms-2 mt-1"
+                    [attr.aria-label]="'Abbreviation ' + dept.abbreviation">
+                {{ dept.abbreviation }}
+              </span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- No results message -->
+        <div *ngIf="filteredDepartments.length === 0 && searchText.length > 0" 
+             class="dropdown-item-text text-muted py-3 text-center no-results"
+             role="status"
+             aria-live="polite">
+          <i class="bi bi-search me-2" aria-hidden="true"></i>
+          No departments found for "{{ searchText }}"
+          <small class="d-block mt-1">Try searching by department name, bureau, code, or abbreviation</small>
+        </div>
+        
+        <!-- Loading state (if you want to add async loading) -->
+        <div *ngIf="isLoading" 
+             class="dropdown-item-text text-muted py-3 text-center"
+             role="status"
+             aria-live="polite">
+          <div class="spinner-border spinner-border-sm me-2" aria-hidden="true"></div>
+          Loading departments...
+        </div>
+      </div>
+    </div>
+    
+    <!-- Selected department display -->
+    <div *ngIf="selectedDepartment && !showDropdown" 
+         class="selected-department mt-2 p-3 bg-light rounded"
+         role="status"
+         aria-live="polite">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center selected-info">
+          <span class="badge bg-secondary font-monospace me-3"
+                [attr.aria-label]="'Selected department code ' + selectedDepartment.code">
+            {{ selectedDepartment.code }}
+          </span>
+          <div class="department-details">
+            <div class="fw-medium text-success">
+              <i class="bi bi-check-circle-fill me-2" aria-hidden="true"></i>
+              {{ selectedDepartment.name }}
+            </div>
+            <small class="text-muted">{{ selectedDepartment.bureauName }}</small>
+          </div>
+        </div>
+        <button 
+          type="button" 
+          class="btn btn-sm btn-outline-secondary clear-btn"
+          (click)="clearSelection()"
+          aria-label="Clear department selection"
+          title="Clear selection">
+          <i class="bi bi-x-lg" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Validation error -->
+    <div *ngIf="isRequired && !selectedDepartment && showValidationError" 
+         class="invalid-feedback d-block"
+         role="alert"
+         aria-live="assertive">
+      <i class="bi bi-exclamation-triangle me-1" aria-hidden="true"></i>
+      Please select a department
+    </div>
+    
+    <!-- Help text -->
+    <div id="departmentHelp" class="form-text">
+      Search by typing department name, bureau, 6-digit code, or abbreviation
+    </div>
+  </div>
+  
+  <!-- Quick filters for common bureaus -->
+  <div class="quick-filters mt-3" *ngIf="!selectedDepartment">
+    <div class="d-flex align-items-center mb-2">
+      <small class="text-muted me-2">Quick filters:</small>
+      <button 
+        type="button" 
+        class="btn btn-sm btn-link text-muted p-0 ms-auto"
+        (click)="toggleQuickFilters()"
+        [attr.aria-expanded]="showQuickFilters"
+        aria-controls="quickFiltersList">
+        <i class="bi" 
+           [class.bi-chevron-down]="!showQuickFilters"
+           [class.bi-chevron-up]="showQuickFilters"
+           aria-hidden="true"></i>
+        {{ showQuickFilters ? 'Hide' : 'Show' }}
+      </button>
+    </div>
+    
+    <div 
+      id="quickFiltersList"
+      class="quick-filters-list"
+      [class.d-none]="!showQuickFilters"
+      [attr.aria-hidden]="!showQuickFilters">
+      <div class="d-flex flex-wrap gap-2">
+        <button *ngFor="let bureau of commonBureaus" 
+                type="button" 
+                class="btn btn-sm btn-outline-primary filter-btn"
+                (click)="filterByBureau(bureau)"
+                [attr.aria-label]="'Filter by ' + bureau.name">
+          {{ bureau.shortName }}
+        </button>
+        <button 
+          type="button" 
+          class="btn btn-sm btn-outline-secondary filter-btn"
+          (click)="clearSearch()"
+          aria-label="Show all departments">
+          <i class="bi bi-arrow-clockwise me-1" aria-hidden="true"></i>
+          Show All
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Statistics and info -->
+  <div class="selector-footer mt-2">
+    <div class="d-flex justify-content-between align-items-center">
+      <small class="text-muted results-count" role="status" aria-live="polite">
+        <i class="bi bi-info-circle me-1" aria-hidden="true"></i>
+        Showing {{ filteredDepartments.length }} of {{ allDepartments.length }} departments
+      </small>
+      
+      <!-- Keyboard shortcut hint -->
+      <small class="text-muted keyboard-hint d-none d-md-inline" *ngIf="showDropdown">
+        <kbd>↑</kbd><kbd>↓</kbd> navigate <kbd>Enter</kbd> select <kbd>Esc</kbd> close
+      </small>
+    </div>
+  </div>
+</div>

@@ -10,20 +10,20 @@
         <div class="card-body">
           <div class="row">
             <div class="col-md-8">
-              <h5>{{ workflow?.pdTitle }}</h5>
-              <p class="mb-1"><strong>PD ID:</strong> {{ workflow?.pdId }}</p>
-              <p class="mb-1"><strong>Type:</strong> {{ workflow?.pdType }}</p>
-              <p class="mb-1"><strong>Submitted by:</strong> {{ workflow?.submittedBy }}</p>
-              <p class="mb-1"><strong>Submitted:</strong> {{ workflow?.submittedDate ? formatDate(workflow.submittedDate) : 'N/A' }}</p>
+              <h5>{{ workflow.pdTitle }}</h5>
+              <p class="mb-1"><strong>PD ID:</strong> {{ workflow.pdId }}</p>
+              <p class="mb-1"><strong>Type:</strong> {{ workflow.pdType }}</p>
+              <p class="mb-1"><strong>Submitted by:</strong> {{ workflow.submittedBy }}</p>
+              <p class="mb-1"><strong>Submitted:</strong> {{ workflow.submittedDate ? formatDate(workflow.submittedDate) : 'N/A' }}</p>
               <div class="alert alert-info p-2 mt-2">
-                <small><i class="bi-info-circle"></i> {{ workflow?.pdType ? getPdTypeDescription(workflow.pdType) : '' }}</small>
+                <small><i class="bi-info-circle"></i> {{ workflow.pdType ? getPdTypeDescription(workflow.pdType) : '' }}</small>
               </div>
             </div>
             <div class="col-md-4 text-md-end">
               <span class="badge fs-6 px-3 py-2" 
-                    [ngClass]="workflow?.status ? getStatusBadgeClass(workflow.status) : 'badge-secondary'">
-                <i [class]="workflow?.status ? getStatusIcon(workflow.status) : 'bi-question'"></i>
-                {{ workflow?.status | titlecase }}
+                    [ngClass]="workflow.status ? getStatusBadgeClass(workflow.status) : 'badge-secondary'">
+                <i [class]="workflow.status ? getStatusIcon(workflow.status) : 'bi-question'"></i>
+                {{ workflow.status | titlecase }}
               </span>
             </div>
           </div>
@@ -47,7 +47,7 @@
           <ngb-progressbar 
             [value]="progressPercentage" 
             [striped]="true" 
-            [animated]="workflow?.status === 'pending'"
+            [animated]="workflow.status === 'pending'"
             type="success">
           </ngb-progressbar>
         </div>

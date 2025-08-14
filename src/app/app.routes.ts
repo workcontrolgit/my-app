@@ -28,6 +28,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/approval/approval.component').then(m => m.ApprovalComponent)
   },
   {
+    path: 'department',
+    loadComponent: () => import('./pages/department/department.component').then(m => m.DepartmentComponent)
+  },
+  {
     path: 'profile',
     loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent)
   },
