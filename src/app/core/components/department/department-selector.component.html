@@ -14,7 +14,7 @@
         (focus)="onFocus()"
         (blur)="onBlur()"
         (keydown)="onKeyDown($event)"
-        placeholder="Search by department, bureau, code, or abbreviation..."
+        placeholder="Search by department name, group, code, or abbreviation..."
         autocomplete="off"
         [class.is-invalid]="isRequired && !selectedDepartment"
         aria-describedby="departmentHelp"
@@ -51,7 +51,7 @@
               <div class="fw-medium text-primary department-name" 
                    [innerHTML]="highlightMatch(dept.name, searchText)">
               </div>
-              <small class="text-muted bureau-name">{{ dept.bureauName }}</small>
+              <small class="text-muted dept-group-name">{{ dept.departmentName }}</small>
             </div>
             <!-- Abbreviation -->
             <div class="abbreviation-container" *ngIf="dept.abbreviation">
@@ -70,7 +70,7 @@
              aria-live="polite">
           <i class="bi bi-search me-2" aria-hidden="true"></i>
           No departments found for "{{ searchText }}"
-          <small class="d-block mt-1">Try searching by department name, bureau, code, or abbreviation</small>
+          <small class="d-block mt-1">Try searching by department name, group, code, or abbreviation</small>
         </div>
         
         <!-- Loading state (if you want to add async loading) -->
@@ -100,7 +100,7 @@
               <i class="bi bi-check-circle-fill me-2" aria-hidden="true"></i>
               {{ selectedDepartment.name }}
             </div>
-            <small class="text-muted">{{ selectedDepartment.bureauName }}</small>
+            <small class="text-muted">{{ selectedDepartment.departmentName }}</small>
           </div>
         </div>
         <button 
@@ -125,11 +125,11 @@
     
     <!-- Help text -->
     <div id="departmentHelp" class="form-text">
-      Search by typing department name, bureau, 6-digit code, or abbreviation
+      Search by typing department name, group, 6-digit code, or abbreviation
     </div>
   </div>
   
-  <!-- Quick filters for common bureaus -->
+  <!-- Quick filters for common department groups -->
   <div class="quick-filters mt-3" *ngIf="!selectedDepartment">
     <div class="d-flex align-items-center mb-2">
       <small class="text-muted me-2">Quick filters:</small>
@@ -153,12 +153,12 @@
       [class.d-none]="!showQuickFilters"
       [attr.aria-hidden]="!showQuickFilters">
       <div class="d-flex flex-wrap gap-2">
-        <button *ngFor="let bureau of commonBureaus" 
+        <button *ngFor="let group of commonDepartmentGroups" 
                 type="button" 
                 class="btn btn-sm btn-outline-primary filter-btn"
-                (click)="filterByBureau(bureau)"
-                [attr.aria-label]="'Filter by ' + bureau.name">
-          {{ bureau.shortName }}
+                (click)="filterByDepartmentGroup(group)"
+                [attr.aria-label]="'Filter by ' + group.name">
+          {{ group.shortName }}
         </button>
         <button 
           type="button" 

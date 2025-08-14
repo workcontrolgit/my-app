@@ -713,6 +713,10 @@ This configuration:
 - Generates coverage reports
 - Suitable for automated environments
 
+## Git Page Publishing
+
+ng deploy --dir=dist/browser --base-href="/AngularBootstrapTutorial/"
+
 ## 🤝 Contributing
 
 Contributions are welcome! This tutorial project can be extended with:

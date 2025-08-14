@@ -7,8 +7,8 @@ import { DepartmentSelectorComponent } from '../../core/components/department/de
 interface Department {
   id: number;
   name: string;
-  bureauId: number;
-  bureauName: string;
+  departmentId: number;
+  departmentName: string;
   abbreviation?: string;
   code: string;
 }

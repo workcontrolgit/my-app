@@ -5,7 +5,7 @@
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
           <h1 class="h2 mb-1">{{ title }}</h1>
-          <p class="text-muted mb-0">Add and manage departments using the modal selector</p>
+          <p class="text-muted mb-0">Select departments from different groups using the modal selector</p>
         </div>
         <div class="d-flex align-items-center">
           <i class="bi bi-building-fill text-primary fs-3"></i>
@@ -46,7 +46,7 @@
             <span class="badge bg-secondary font-monospace me-3 fs-6">{{ selectedDepartment.code }}</span>
             <div class="flex-grow-1">
               <h6 class="mb-1 text-success">{{ selectedDepartment.name }}</h6>
-              <small class="text-muted">{{ selectedDepartment.bureauName }}</small>
+              <small class="text-muted">{{ selectedDepartment.departmentName }}</small>
               <span class="badge bg-light text-dark ms-2" *ngIf="selectedDepartment.abbreviation">
                 {{ selectedDepartment.abbreviation }}
               </span>

@@ -103,7 +103,7 @@
     </div>
     
     <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
-      <form [formGroup]="addressForm" (ngSubmit)="saveAddress(modal)">
+      <form [formGroup]="addressForm" (ngSubmit)="onFormSubmit($event, modal)">
         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="type" class="form-label fw-medium">Address Type *</label>

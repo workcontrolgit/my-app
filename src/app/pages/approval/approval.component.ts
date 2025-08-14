@@ -16,7 +16,6 @@ import { ApprovalEvent, Approval } from '../../shared/models';
 })
 export class ApprovalComponent implements OnInit {
   title = 'Approval Workflow';
-  workflowData: ApprovalWorkflow | null = null;
   currentUserRole = 'Manager';
   
   // Dashboard statistics
@@ -27,50 +26,52 @@ export class ApprovalComponent implements OnInit {
     total: 60
   };
 
+  // Initialize with sample workflow data immediately to prevent flash
+  workflowData: ApprovalWorkflow = {
+    pdId: 'PD-2025-001',
+    pdTitle: 'Senior Software Engineer - Frontend Development',
+    pdType: 'Expert and Consultant',
+    status: 'pending',
+    submittedBy: 'HR Department',
+    submittedDate: '2025-07-30T09:00:00Z',
+    availableSupervisors: ['Alice Johnson', 'Michael Brown', 'Sarah Davis', 'Robert Wilson'],
+    approvals: [
+      {
+        approverRole: 'Reviewer',
+        approverName: 'John Doe',
+        status: 'approved',
+        timestamp: '2025-07-31T10:00:00Z',
+        comments: 'Position requirements are well defined and align with team needs.',
+        isRequired: false
+      },
+      {
+        approverRole: 'Manager',
+        approverName: 'Bob Wilson',
+        status: 'pending',
+        timestamp: null,
+        comments: null,
+        isRequired: true,
+        needsSupervisorSelection: true,
+        selectedSupervisor: undefined
+      },
+      {
+        approverRole: 'Director',
+        approverName: 'Sarah Mitchell',
+        status: 'pending',
+        timestamp: null,
+        comments: null,
+        isRequired: true
+      }
+    ]
+  };
+
   ngOnInit() {
-    // Initialize with sample workflow data
-    this.loadSampleWorkflowData();
+    // No need to load data here since it's initialized above
   }
 
   private loadSampleWorkflowData() {
-    // Sample workflow data that will be passed to the ApprovalWorkflowComponent
-    this.workflowData = {
-      pdId: 'PD-2025-001',
-      pdTitle: 'Senior Software Engineer - Frontend Development',
-      pdType: 'Expert and Consultant',
-      status: 'pending',
-      submittedBy: 'HR Department',
-      submittedDate: '2025-07-30T09:00:00Z',
-      availableSupervisors: ['Alice Johnson', 'Michael Brown', 'Sarah Davis', 'Robert Wilson'],
-      approvals: [
-        {
-          approverRole: 'Reviewer',
-          approverName: 'John Doe',
-          status: 'approved',
-          timestamp: '2025-07-31T10:00:00Z',
-          comments: 'Position requirements are well defined and align with team needs.',
-          isRequired: false
-        },
-        {
-          approverRole: 'Manager',
-          approverName: 'Bob Wilson',
-          status: 'pending',
-          timestamp: null,
-          comments: null,
-          isRequired: true,
-          needsSupervisorSelection: true,
-          selectedSupervisor: undefined
-        },
-        {
-          approverRole: 'Director',
-          approverName: 'Sarah Mitchell',
-          status: 'pending',
-          timestamp: null,
-          comments: null,
-          isRequired: true
-        }
-      ]
-    };
+    // This method is now deprecated since data is initialized at declaration
+    // Kept for potential future use with async data loading
   }
 
   // Event handlers for workflow component outputs
@@ -90,9 +91,7 @@ export class ApprovalComponent implements OnInit {
 
   onWorkflowStatusChanged(status: 'pending' | 'approved' | 'rejected') {
     console.log('Workflow status changed to:', status);
-    if (this.workflowData) {
-      this.workflowData.status = status;
-    }
+    this.workflowData.status = status;
   }
 
   onWorkflowUpdated(workflow: ApprovalWorkflow) {
@@ -109,20 +108,18 @@ export class ApprovalComponent implements OnInit {
   }
 
   private updateDashboardStats() {
-    if (this.workflowData) {
-      const pending = this.workflowData.approvals.filter(a => a.status === 'pending').length;
-      const approved = this.workflowData.approvals.filter(a => a.status === 'approved').length;
-      const rejected = this.workflowData.approvals.filter(a => a.status === 'rejected').length;
-      
-      // Update local workflow stats (in a real app, this might update global stats)
-      this.dashboardStats = {
-        ...this.dashboardStats,
-        pending: this.dashboardStats.pending - 1 + pending,
-        approved: approved,
-        rejected: rejected,
-        total: this.dashboardStats.total
-      };
-    }
+    const pending = this.workflowData.approvals.filter(a => a.status === 'pending').length;
+    const approved = this.workflowData.approvals.filter(a => a.status === 'approved').length;
+    const rejected = this.workflowData.approvals.filter(a => a.status === 'rejected').length;
+    
+    // Update local workflow stats (in a real app, this might update global stats)
+    this.dashboardStats = {
+      ...this.dashboardStats,
+      pending: this.dashboardStats.pending - 1 + pending,
+      approved: approved,
+      rejected: rejected,
+      total: this.dashboardStats.total
+    };
   }
 
   get workflowJson(): string {
@@ -130,7 +127,6 @@ export class ApprovalComponent implements OnInit {
   }
 
   get approvalSummary() {
-    if (!this.workflowData) return null;
     
     const pending = this.workflowData.approvals.filter(a => a.status === 'pending').length;
     const approved = this.workflowData.approvals.filter(a => a.status === 'approved').length;
@@ -141,10 +137,10 @@ export class ApprovalComponent implements OnInit {
   }
 
   get workflowTitle(): string {
-    return this.workflowData?.pdTitle || 'No workflow loaded';
+    return this.workflowData.pdTitle;
   }
 
   get workflowStatus(): string {
-    return this.workflowData?.status || 'unknown';
+    return this.workflowData.status;
   }
 }

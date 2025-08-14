@@ -111,6 +111,11 @@ export class AddressManagerComponent implements OnInit, OnChanges {
     });
   }
 
+  onFormSubmit(event: Event, modal: NgbModalRef) {
+    event.preventDefault();
+    this.saveAddress(modal);
+  }
+
   saveAddress(modal: NgbModalRef) {
     if (this.addressForm.valid) {
       const formValue = this.addressForm.value;

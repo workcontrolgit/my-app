@@ -15,16 +15,9 @@ import { AddressManagerComponent, Address } from '../../core/components/address/
 })
 export class AddressComponent implements OnInit {
   title = 'Address Management';
-  addresses: Address[] = [];
-
-  ngOnInit() {
-    // Initialize with sample data
-    this.loadSampleAddresses();
-  }
-
-  private loadSampleAddresses() {
-    // Sample data that will be passed to the AddressManagerComponent
-    this.addresses = [
+  
+  // Initialize with sample data immediately to prevent flash
+  addresses: Address[] = [
       {
         id: '1',
         type: 'home',
@@ -56,6 +49,14 @@ export class AddressComponent implements OnInit {
         isDefault: false
       }
     ];
+
+  ngOnInit() {
+    // No need to load data here since it's initialized above
+  }
+
+  private loadSampleAddresses() {
+    // This method is now deprecated since data is initialized at declaration
+    // Kept for potential future use with async data loading
   }
 
   onAddressesChange(updatedAddresses: Address[]) {
