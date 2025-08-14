@@ -1,0 +1,59 @@
+// JSON Display Styling
+.json-display {
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+  font-family: 'Courier New', Monaco, 'Lucida Console', monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  padding: 1.5rem;
+  overflow-x: auto;
+  max-height: 400px;
+  overflow-y: auto;
+  border-radius: 0 0 12px 12px;
+}
+
+// Custom scrollbar for JSON display
+.json-display::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.json-display::-webkit-scrollbar-thumb {
+  background: #464647;
+  border-radius: 4px;
+}
+
+.json-display::-webkit-scrollbar-thumb:hover {
+  background: #5a5a5a;
+}
+
+.json-display::-webkit-scrollbar-track {
+  background: #2d2d2d;
+}
+
+// Department card styling
+.border-left-primary {
+  border-left: 4px solid var(--bs-primary) !important;
+}
+
+.card-body {
+  position: relative;
+}
+
+// Badge styling
+.badge {
+  font-size: 0.7em;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .json-display {
+    font-size: 0.75rem;
+    padding: 1rem;
+    max-height: 300px;
+  }
+  
+  .card-title {
+    font-size: 1rem;
+  }
+}
